@@ -3,3 +3,6 @@
 *.prefs
 .project
 .classpath
+*.class
+*.properties
+*.lst
