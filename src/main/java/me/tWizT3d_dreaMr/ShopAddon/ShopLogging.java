@@ -69,11 +69,11 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  public static void add(Player p) {
 		  if(checkers.contains(p.getUniqueId().toString())) {
 			  checkers.remove(p.getUniqueId().toString());
-			  p.sendMessage(ChatColor.of("#E53C67")+"Turned off logging");
+			  p.sendMessage(Format.format(main.getCon().getString("Command.LoggingOff")));
 			  return;
 		  }
 		  checkers.add(p.getUniqueId().toString());
-		  p.sendMessage(ChatColor.of("#E53C67")+"Turned on logging");
+		  p.sendMessage(Format.format(main.getCon().getString("Command.LoggingOn")));
 	  }
 	  
 	@EventHandler(priority=EventPriority.LOW)
@@ -128,8 +128,14 @@ public ShopLogging(String host,int port, String database,String username,String 
 	public static void sendPage(int i, Player p) {
 		for(LoggingPlayer LP:LPS) {
 			if(LP.isName(p.getName())) {
+				int num=1;
 				for(String s:LP.message(i)) {
-					p.sendMessage(ChatColor.of("#7DB6FF")+s);
+					String[]split=s.split(";");
+					for(String send:split) {
+						p.sendMessage(ChatColor.AQUA+send.replace("%NUM%", ""+num));
+					}
+					num++;
+				
 				}
 				return;
 			}
@@ -145,31 +151,26 @@ public ShopLogging(String host,int port, String database,String username,String 
 		
 				try {
 					while(result.next()) {
-						DateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm:ss"); 
-						Date date = new Date(Long.parseLong(result.getString("Time"))); 						
-						String res= "Date "+
-						format.format(date)
-						+" UUID "
-						+result.getString("PlayerUUID")
-						+" Name "
-						+result.getString("PlayerName")
-						+" Material "
-						+result.getString("Type")
-						+" Price "
-						+result.getString("Price")
-						+" Item Name "
-						+result.getString("ItemName")
-						+" Item Lore "
-						+result.getString("ItemLore")
-						+" Sign location "
-						+result.getString("SignX")
-						+", "
-						+result.getString("SignY")
-						+", "
-						+result.getString("SignZ")
-						+", "
-						+result.getString("SignWorld");
-						ret.add(res);
+						DateFormat format = new SimpleDateFormat("dd MMM yy HH:mm:ss"); 
+						Date date = new Date(Long.parseLong(result.getString("Time")));
+						
+						String form=main.getCon().getString("Logging.Format");
+						
+						form=form.replace("%DATE%", format.format(date));
+						form=form.replace("%UUID%", result.getString("PlayerUUID"));
+						form=form.replace("%NAME%", result.getString("PlayerName"));
+						form=form.replace("%MATERIAL%", result.getString("Type"));
+						form=form.replace("%PRICE%", result.getString("Price"));
+						form=form.replace("%INAME%", result.getString("ItemName"));
+						form=form.replace("%ILORE%", result.getString("ItemLore"));
+						form=form.replace("%SIGNX%", result.getString("SignX"));
+						form=form.replace("%SIGNY%", result.getString("SignY"));
+						form=form.replace("%SIGNZ%", result.getString("SignZ"));
+						form=form.replace("%SIGNWORLD%", result.getString("SignWorld"));
+						
+						
+						form=Format.format(form);
+						ret.add(form);
 					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -184,9 +185,15 @@ public ShopLogging(String host,int port, String database,String username,String 
 					LPS.add(LP);
 				else
 					LPS.set(i, LP);
+				int num=1;
 				for(String s:LP.message(0)) {
-					p.sendMessage(ChatColor.of("#7DB6FF")+s);
+					String[]split=s.split(";");
+					for(String send:split) {
+						p.sendMessage(ChatColor.AQUA+send.replace("%NUM%", ""+num));
+					}
+					num++;
 				}
+				
 				
 			}
 		};

@@ -12,7 +12,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.md_5.bungee.api.ChatColor;
 
 
 public class main extends JavaPlugin {
@@ -48,18 +47,27 @@ public void onEnable()  {
     	getConfig().addDefault("Interaction.blacklist", "&#952f39That item can not be sold");
     	getConfig().addDefault("Interaction.whitelist", "&#952f39That item can not be sold");
     	getConfig().addDefault("Logging.Enable", "false");
+    	getConfig().addDefault("Logging.Format", "%NUM%: &cDate %DATE%;&dUUID %UUID%;"
+    			+ "&cName %NAME% Material %MATERIAL% Price %PRICE%;&dItemName %INAME% ItemLore %ILORE%;"
+    			+ "&cSign Location %SIGNX%, %SIGNY%, %SIGNZ%, %SIGNWORLD%");
+    	getConfig().addDefault("Logging.PageSize", 5);
         getConfig().addDefault("Logging.SQL.host", "localhost");
         getConfig().addDefault("Logging.SQL.port", 3306);
         getConfig().addDefault("Logging.SQL.database", "database");
         getConfig().addDefault("Logging.SQL.username", "username");
         getConfig().addDefault("Logging.SQL.password", "password");
+        getConfig().addDefault("Command.OnlyPlayers", "&cOnly players can use this command!");
+        getConfig().addDefault("Command.IncorrectUsage", "&cIncorrect usage!");
+        getConfig().addDefault("Command.NotANumber", "&cThat isn't a valid number!");
+        getConfig().addDefault("Command.LoggingOn", "&#11fb76Check logging on!");
+        getConfig().addDefault("Command.LoggingOff", "&#de723fCheck logging off!");
     	getConfig().options().copyDefaults(true);
     	saveConfig();
     }
     
 	config=getConfig();
 	Bukkit.getPluginManager().registerEvents(new CheckOn(),this);
-	//ShopLogging(String host,int port, String database,String username,String password,FileConfiguration fileConfiguration) {
+	
 	if(getConfig().getBoolean("Logging.Enable")){	
 		ConfigurationSection s=getConfig().getConfigurationSection("Logging.SQL");
 		Bukkit.getPluginManager().registerEvents(new ShopLogging(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password")),this);
@@ -75,7 +83,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 
 	  if (command.getName().equalsIgnoreCase("SA"))
 	  { 	if(!(sender instanceof Player)) {
-		  sender.sendMessage("Only players can use this command.");
+		  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));
 		  return true;
 	  }
 	  if(args.length==1) {
@@ -84,12 +92,12 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  }
 	  }else if(args.length==2) {
 		  if(args[0].equalsIgnoreCase("check")) {
-				if(Integer.valueOf(args[1])!=null&&(Integer.parseInt(args[1])-1)>=0) {
+				if(isNumeric(args[1])&&(Integer.parseInt(args[1])-1)>=0) {
 					ShopLogging.sendPage(Integer.parseInt(args[1])-1, (Player)sender );
-				} else sender.sendMessage("nullpoint");
+				} else sender.sendMessage(Format.format( config.getString("Command.NotANumber")));
 		  }
 	  } else {
-			  sender.sendMessage(ChatColor.RED+"Incorrect usage");
+			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
 		  }
 		  return true;
 	  }
@@ -97,6 +105,17 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 	}
 public static CreationCheck getCreationCheck() {
 	return creationCheck;
+}
+public static boolean isNumeric(String strNum) {
+    if (strNum == null) {
+        return false;
+    }
+    try {
+        Integer i = Integer.parseInt(strNum);
+    } catch (NumberFormatException nfe) {
+        return false;
+    }
+    return true;
 }
 public static FileConfiguration getCon() {
 	return config;
