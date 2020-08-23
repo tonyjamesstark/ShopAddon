@@ -84,9 +84,9 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  }
 	  }else if(args.length==2) {
 		  if(args[0].equalsIgnoreCase("check")) {
-				if(Integer.getInteger(args[1])!=null) {
-					
-				}
+				if(Integer.valueOf(args[1])!=null&&(Integer.parseInt(args[1])-1)>=0) {
+					ShopLogging.sendPage(Integer.parseInt(args[1])-1, (Player)sender );
+				} else sender.sendMessage("nullpoint");
 		  }
 	  } else {
 			  sender.sendMessage(ChatColor.RED+"Incorrect usage");

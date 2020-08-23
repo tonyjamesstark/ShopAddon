@@ -4,24 +4,28 @@ import java.util.ArrayList;
 
 public class LoggingPlayer {
 private ArrayList<String> al;
-private int page;
 private String pname;
-public LoggingPlayer(ArrayList<String> arrayList, int page, String pname) {
+public LoggingPlayer(ArrayList<String> arrayList, String pname) {
 	this.al=arrayList;
-	this.page=page;
 	this.pname=pname;
 }
 public boolean isName(String pn) {
 	return pname.equals(pn);
 }
-public ArrayList<String> message(Integer pag){
-	if(pag==null) pag=page+1;
+public ArrayList<String> message(int pag){
+	
 	ArrayList<String> ret=new ArrayList<String>();
-	for(int i=0; i>5; i++) {
-		if(al.size()<(page*10)+i){
-			ret.add(al.get((page*10)+i));
+	for(int i=0; i<5; i++) {
+		if(al.size()>(pag*5)+i){
+			
+			ret.add(al.get((pag*5)+i));
 		} else break;
 	}
+	int of=((al.size()/5));
+	if(al.size()%5==0)
+		of--;
+	pag=pag+1;
+	ret.add(""+pag+" of "+of);
 	return ret;
 }
 }

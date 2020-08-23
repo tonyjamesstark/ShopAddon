@@ -81,18 +81,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 		if(!checkers.contains(event.getPlayer().getUniqueId().toString())) return;
 		Location loc=event.getClickedBlock().getLocation();
 		String check=""+loc.getBlockX()+" "+loc.getBlockY()+" "+loc.getBlockZ()+" "+loc.getWorld().getName().toString();
-		LoggingPlayer LP=new LoggingPlayer(getResults("Location", check),0,event.getPlayer().getName());
-		int i=-1;
-		for(LoggingPlayer lop:LPS) {
-			if(lop.isName(event.getPlayer().getName())) i=LPS.indexOf(lop);
-		}
-		if(i==-1)
-			LPS.add(LP);
-		else
-			LPS.set(i, LP);
-		for(String s:LP.message(0)) {
-			event.getPlayer().sendMessage(ChatColor.of("#CAE1FF")+s);
-		}
+		getResults("Location",check, event.getPlayer());
 		event.setCancelled(true);
 		checkers.remove(event.getPlayer().getUniqueId().toString());
 	}
@@ -140,15 +129,14 @@ public ShopLogging(String host,int port, String database,String username,String 
 		for(LoggingPlayer LP:LPS) {
 			if(LP.isName(p.getName())) {
 				for(String s:LP.message(i)) {
-					p.sendMessage(ChatColor.of("#CAE1FF")+s);
+					p.sendMessage(ChatColor.of("#7DB6FF")+s);
 				}
 				return;
 			}
 		}
 	}
-	public static ArrayList<String> getResults(String field, String toLookup){
+	public static void getResults(String field, String toLookup, Player p){
 		ArrayList<String> ret=new ArrayList<String>();
-		
 		BukkitRunnable r=new BukkitRunnable() {
 	
 	  	    @Override
@@ -156,8 +144,12 @@ public ShopLogging(String host,int port, String database,String username,String 
 				ResultSet result=results(field, toLookup);
 		
 				try {
-					while(result.next()) {						
-						String res= "Date "+result.getString("Time")+" UUID "
+					while(result.next()) {
+						DateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm:ss"); 
+						Date date = new Date(Long.parseLong(result.getString("Time"))); 						
+						String res= "Date "+
+						format.format(date)
+						+" UUID "
 						+result.getString("PlayerUUID")
 						+" Name "
 						+result.getString("PlayerName")
@@ -165,7 +157,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 						+result.getString("Type")
 						+" Price "
 						+result.getString("Price")
-						+" Item Name"
+						+" Item Name "
 						+result.getString("ItemName")
 						+" Item Lore "
 						+result.getString("ItemLore")
@@ -183,10 +175,22 @@ public ShopLogging(String host,int port, String database,String username,String 
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				LoggingPlayer LP=new LoggingPlayer(ret,p.getName());
+				int i=-1;
+				for(LoggingPlayer lop:LPS) {
+					if(lop.isName(p.getName())) i=LPS.indexOf(lop);
+				}
+				if(i==-1)
+					LPS.add(LP);
+				else
+					LPS.set(i, LP);
+				for(String s:LP.message(0)) {
+					p.sendMessage(ChatColor.of("#7DB6FF")+s);
+				}
+				
 			}
 		};
 		r.runTaskAsynchronously(main.plugin);
-		return ret;
 	}
 	
 	public static ResultSet results(String field, String toLookup){
