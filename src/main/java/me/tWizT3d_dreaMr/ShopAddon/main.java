@@ -111,7 +111,8 @@ public static boolean isNumeric(String strNum) {
         return false;
     }
     try {
-        Integer i = Integer.parseInt(strNum);
+        @SuppressWarnings("unused")
+		Integer i = Integer.parseInt(strNum);
     } catch (NumberFormatException nfe) {
         return false;
     }
