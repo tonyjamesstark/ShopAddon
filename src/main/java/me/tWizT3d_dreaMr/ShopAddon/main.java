@@ -58,6 +58,7 @@ public void onEnable()  {
         getConfig().addDefault("Logging.SQL.password", "password");
         getConfig().addDefault("Command.OnlyPlayers", "&cOnly players can use this command!");
         getConfig().addDefault("Command.IncorrectUsage", "&cIncorrect usage!");
+        getConfig().addDefault("Command.NoPerms", "&cYou dont have permission!");
         getConfig().addDefault("Command.NotANumber", "&cThat isn't a valid number!");
         getConfig().addDefault("Command.LoggingOn", "&#11fb76Check logging on!");
         getConfig().addDefault("Command.LoggingOff", "&#de723fCheck logging off!");
@@ -86,15 +87,20 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));
 		  return true;
 	  }
+	  Player p=(Player)sender;
+	  if(!p.hasPermission("ShopAddon.Check")) {
+		  sender.sendMessage(Format.format( config.getString("Command.NoPerms")));
+	  }
+		  
 	  if(args.length==1) {
 		  if(args[0].equalsIgnoreCase("check")) {
-			ShopLogging.add((Player)sender);  
+			ShopLogging.add(p);  
 		  }
 	  }else if(args.length==2) {
 		  if(args[0].equalsIgnoreCase("check")) {
 				if(isNumeric(args[1])&&(Integer.parseInt(args[1])-1)>=0) {
-					ShopLogging.sendPage(Integer.parseInt(args[1])-1, (Player)sender );
-				} else sender.sendMessage(Format.format( config.getString("Command.NotANumber")));
+					ShopLogging.sendPage(Integer.parseInt(args[1])-1, p );
+				} else p.sendMessage(Format.format( config.getString("Command.NotANumber")));
 		  }
 	  } else {
 			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
