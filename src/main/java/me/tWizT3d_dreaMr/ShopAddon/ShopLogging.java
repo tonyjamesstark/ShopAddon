@@ -2,6 +2,7 @@ package me.tWizT3d_dreaMr.ShopAddon;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,7 +24,7 @@ import com.snowgears.shop.event.PlayerExchangeShopEvent;
 import net.md_5.bungee.api.ChatColor;
 
 public class ShopLogging implements Listener {
-	  private Connection connection;
+	  private static Connection connection;
 	  private String host, database, username, password;
 	  private int port;
 	  private static Statement statement;
@@ -113,9 +114,21 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	    @Override
 	  	    public void run() {
 	  	    	try {
-	  	    
-	  	    		statement.executeUpdate("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ('"
-	  	    				+buyerUUID+"', '"+buyername+"', '"+itemMat+"', '"+price+"', '"+itemName+"', '"+itemLore+"', '"+time+"', '"+x+"', '"+y+"', '"+z+"', '"+world+"');");
+	  	    		PreparedStatement preparedStatement =
+	  	    		        connection.prepareStatement("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ('"
+	  		  	    				+"', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+  	    			preparedStatement.setString(1, buyerUUID);
+  	    			preparedStatement.setString(2, buyername);	  	    		
+  	    			preparedStatement.setString(2, itemMat);
+  	    			preparedStatement.setString(3, price);		
+  	    			preparedStatement.setString(4, itemName);
+  	    			preparedStatement.setString(5, itemLore);		
+  	    			preparedStatement.setString(6, ""+time);
+  	    			preparedStatement.setString(7, ""+x);		
+  	    			preparedStatement.setString(8, ""+y);
+  	    			preparedStatement.setString(9, ""+z);
+  	    			preparedStatement.setString(10, world);
+  	    			preparedStatement.executeUpdate();
 	  	    	} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,6 +153,9 @@ public ShopLogging(String host,int port, String database,String username,String 
 				return;
 			}
 		}
+	}
+	public static void getResultsFromPlayer(Player of, Player to) {
+		getResults("PlayerUUID",of.getUniqueId().toString(),to);
 	}
 	public static void getResults(String field, String toLookup, Player p){
 		ArrayList<String> ret=new ArrayList<String>();
@@ -212,7 +228,12 @@ public ShopLogging(String host,int port, String database,String username,String 
 			}
 	  	}else
 	  		try {
-				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE "+field+" = '"+toLookup+"';");
+	  			PreparedStatement preparedStatement =
+	  		
+	  		        connection.prepareStatement("SELECT * FROM ShopTransaction WHERE ? = ?;");
+  			preparedStatement.setString(1, field);
+  			preparedStatement.setString(2, toLookup);	
+	  		result= preparedStatement.executeQuery();
 	
 			} catch (SQLException e) {
 				e.printStackTrace();
