@@ -48,7 +48,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	}
 	  	try {
 	  		statement.execute("CREATE TABLE IF NOT EXISTS ShopTransaction (PlayerUUID varchar(50),PlayerName varchar(50), Type varchar(200), "
-	  				+ "Price varchar(100), ItemName varchar(1000), ItemLore varchar(10000), Time varchar(100), SignX varchar(100), SignY varchar(100), SignZ varchar(100), SignWorld varchar(100))");
+	  				+ "Price varchar(100), ItemName varchar(1000), ItemLore varchar(10000), Time varchar(100), SignX int(255), SignY int(255), SignZ int(255), SignWorld varchar(100))");
 	  		} catch (SQLException e) {
 	  		// TODO Auto-generated catch block
 	  		e.printStackTrace();
@@ -77,7 +77,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 		  p.sendMessage(Format.format(main.getCon().getString("Command.LoggingOn")));
 	  }
 	  
-	@EventHandler(priority=EventPriority.LOW)
+	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=true)
 	public void click(PlayerInteractEvent event) {
 		if(!checkers.contains(event.getPlayer().getUniqueId().toString())) return;
 		Location loc=event.getClickedBlock().getLocation();
@@ -115,20 +115,22 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	    public void run() {
 	  	    	try {
 	  	    		PreparedStatement preparedStatement =
-	  	    		        connection.prepareStatement("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ('"
-	  		  	    				+"', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	  	    		        connection.prepareStatement("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ("
+	  		  	    				+"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
   	    			preparedStatement.setString(1, buyerUUID);
   	    			preparedStatement.setString(2, buyername);	  	    		
-  	    			preparedStatement.setString(2, itemMat);
-  	    			preparedStatement.setString(3, price);		
-  	    			preparedStatement.setString(4, itemName);
-  	    			preparedStatement.setString(5, itemLore);		
-  	    			preparedStatement.setString(6, ""+time);
-  	    			preparedStatement.setString(7, ""+x);		
-  	    			preparedStatement.setString(8, ""+y);
-  	    			preparedStatement.setString(9, ""+z);
-  	    			preparedStatement.setString(10, world);
+  	    			preparedStatement.setString(3, itemMat);
+  	    			preparedStatement.setString(4, price);		
+  	    			preparedStatement.setString(5, itemName);
+  	    			preparedStatement.setString(6, itemLore);		
+  	    			preparedStatement.setString(7, ""+time);
+  	    			preparedStatement.setInt(8, x);		
+  	    			preparedStatement.setInt(9, y);
+  	    			preparedStatement.setInt(10, z);
+  	    			preparedStatement.setString(11, world);
   	    			preparedStatement.executeUpdate();
+	  	    		//statement.executeUpdate("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ('"
+	  	    		//		+buyerUUID+"', '"+buyername+"', '"+itemMat+"', '"+price+"', '"+itemName+"', '"+itemLore+"', '"+time+"', '"+x+"', '"+y+"', '"+z+"', '"++"');");
 	  	    	} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,9 +181,9 @@ public ShopLogging(String host,int port, String database,String username,String 
 						form=form.replace("%PRICE%", result.getString("Price"));
 						form=form.replace("%INAME%", result.getString("ItemName"));
 						form=form.replace("%ILORE%", result.getString("ItemLore"));
-						form=form.replace("%SIGNX%", result.getString("SignX"));
-						form=form.replace("%SIGNY%", result.getString("SignY"));
-						form=form.replace("%SIGNZ%", result.getString("SignZ"));
+						form=form.replace("%SIGNX%", ""+result.getInt("SignX"));
+						form=form.replace("%SIGNY%", ""+result.getInt("SignY"));
+						form=form.replace("%SIGNZ%", ""+result.getInt("SignZ"));
 						form=form.replace("%SIGNWORLD%", result.getString("SignWorld"));
 						
 						
@@ -221,18 +223,15 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	if(field.equals("Location")) {
 	  		String[] loc=toLookup.split(" ");
 	  		try {
-				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE SignX = '"+loc[0]+"' and SignY = '"+loc[1]+"' and SignZ = '"+loc[2]+"' and SignWorld = '"+loc[3]+"';");
+				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE SignX = "+loc[0]+" and SignY = "+loc[1]+" and SignZ = "+loc[2]+" and SignWorld = '"+loc[3]+"';");
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 	  	}else
-	  		try {
-	  			PreparedStatement preparedStatement =
-	  		
-	  		        connection.prepareStatement("SELECT * FROM ShopTransaction WHERE ? = ?;");
-  			preparedStatement.setString(1, field);
-  			preparedStatement.setString(2, toLookup);	
+	  		try {PreparedStatement preparedStatement =
+	  		        connection.prepareStatement("SELECT * FROM ShopTransaction WHERE "+field+" = ?;");
+  			preparedStatement.setString(1, toLookup);
 	  		result= preparedStatement.executeQuery();
 	
 			} catch (SQLException e) {
@@ -242,5 +241,13 @@ public ShopLogging(String host,int port, String database,String username,String 
 		
 		return result;
 		
+	}
+	public static LoggingPlayer getLoggingPlayer(Player p) {
+		for(LoggingPlayer LP:LPS) {
+			if(LP.isName(p.getName())) {
+				return LP;
+			}
+		}
+		return null;
 	}
 }

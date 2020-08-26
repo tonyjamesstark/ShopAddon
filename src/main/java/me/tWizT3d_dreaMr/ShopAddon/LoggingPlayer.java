@@ -28,4 +28,7 @@ public ArrayList<String> message(int pag){
 	ret.add(""+pag+" of "+of);
 	return ret;
 }
+public int getPageAmount() {
+	return ((al.size()/main.getCon().getInt("Logging.PageSize")));
+}
 }

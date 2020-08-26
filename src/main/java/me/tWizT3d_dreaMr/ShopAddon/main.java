@@ -2,6 +2,8 @@ package me.tWizT3d_dreaMr.ShopAddon;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -84,7 +86,28 @@ public void onEnable()  {
     creationCheck=new CreationCheck(con,wh);        
 
 }
-
+public List<String> onTabComplete(CommandSender sender , Command cmd, String CommandLabel, String[] args){
+	if(cmd.getName().equalsIgnoreCase("SA")) {
+		ArrayList<String> ret= new ArrayList<String>();
+		if(args.length==1) {
+			ret.add("check");
+			return ret;
+		}
+		if(args.length==2) {
+			if(sender instanceof Player) {
+			LoggingPlayer lp=ShopLogging.getLoggingPlayer((Player)sender);
+			if(lp!=null){
+				for(int i=1; i<=lp.getPageAmount();i++)
+					ret.add(""+i);
+			}
+			}
+			for(Player p: Bukkit.getOnlinePlayers())
+				ret.add(p.getName());
+			return ret;
+		}
+		}
+	return null;
+	}
 public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 	  if (command.getName().equalsIgnoreCase("SA"))
