@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,6 +14,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 
 
@@ -67,12 +75,26 @@ public void onEnable()  {
     	getConfig().options().copyDefaults(true);
     	saveConfig();
     }
-    if(getConfig().get("Command.NotAArgumentr")==null) {
-        getConfig().addDefault("Command.NotAArgumentr", "&cThat isn't a valid Argument!");
+    if(getConfig().get("Command.NotAArgument")==null) {
+        getConfig().addDefault("Command.NotAArgument", "&cThat isn't a valid Argument!");
+        getConfig().options().copyDefaults(true);
+    	saveConfig();
+    }if(getConfig().get("WorldGuard")==null) {
+        getConfig().addDefault("Command.RegionDoesntExist", "&cRegion doesnt exist!");
+        getConfig().addDefault("Command.WorldGuardNotEnabled", "&cWorldguard support not enabled!");
+    	getConfig().addDefault("WorldGuard", false);
         getConfig().options().copyDefaults(true);
     	saveConfig();
     }
-    
+    if(getConfig().getBoolean("WorldGuard")) {
+    	if(!getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+
+    		getLogger().info("WorldGuard enabled in config and worldguard not enabled on server. Disabling worldguard support");
+    		getConfig().set("WorldGuard", false);
+    		saveConfig();
+    	}
+    		
+    }
 	config=getConfig();
 	Bukkit.getPluginManager().registerEvents(new CheckOn(),this);
 	
@@ -119,7 +141,10 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 	  if(!p.hasPermission("ShopAddon.Check")) {
 		  sender.sendMessage(Format.format( config.getString("Command.NoPerms")));
 	  }
-		  
+		  if(args.length==0) {
+			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
+			  return true;
+		  }
 	  if(args.length==1) {
 		  if(args[0].equalsIgnoreCase("check")) {
 			ShopLogging.add(p);  
@@ -128,14 +153,67 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  if(args[0].equalsIgnoreCase("check")) {
 				if(isNumeric(args[1])&&(Integer.parseInt(args[1])-1)>=0) {
 					ShopLogging.sendPage(Integer.parseInt(args[1])-1, p );
-				}else {
+				}else if(args[1].equalsIgnoreCase("region")){
+					if(!getConfig().getBoolean("WorldGuard")) {
+						p.sendMessage(Format.format( config.getString("Command.WorldGuardNotEnabled")));
+						return true;
+					
+					}
+					Location loc=((Player)sender).getLocation();
+					RegionManager rm = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(loc.getWorld()));
+
+					
+					ApplicableRegionSet set = rm.getApplicableRegions( BukkitAdapter.asBlockVector(loc));
+					ProtectedRegion heaviest=null;
+					int w=-1;
+					if(set.size()!=0)
+						for ( ProtectedRegion region : set ) {
+							if(w<region.getPriority()) {
+								w=region.getPriority();
+								heaviest=region;
+							}
+						}
+					if(heaviest==null) {
+						p.sendMessage(Format.format( config.getString("Command.RegionDoesntExist")));
+						return true;
+					}
+					BlockVector3 max=heaviest.getMaximumPoint();
+					BlockVector3 min=heaviest.getMinimumPoint();
+					String s=""+max.getBlockX()+" "+max.getBlockY()+" "+max.getBlockZ()+" "+min.getBlockX()+" "+min.getBlockY()+" "+min.getBlockZ()+" "+loc.getWorld().getName().toString();
+					ShopLogging.getResults("LocationBetween",s,((Player)sender));
+					
+				}
+				else {
 					Player getp=getPlayer(args[1]);
 					if(getp!=null) {
 						ShopLogging.getResultsFromPlayer(getp, p);
 					}
-					else p.sendMessage(Format.format( config.getString("Command.NotAArgumentr")));}
+					else p.sendMessage(Format.format( config.getString("Command.NotAArgument")));}
 		  }
-	  } else {
+	  } else if(args.length==3){
+		  if(args[1].equalsIgnoreCase("region")){
+			  if(!getConfig().getBoolean("WorldGuard")) {
+				p.sendMessage(Format.format( config.getString("Command.WorldGuardNotEnabled")));
+				return true;
+			
+			}
+				Location loc=((Player)sender).getLocation();
+				RegionManager rm = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(loc.getWorld()));
+				ProtectedRegion rg=rm.getRegion(args[2]);
+				if(rg==null) {
+					p.sendMessage(Format.format( config.getString("Command.RegionDoesntExist")));
+					return true;
+				}
+				
+				BlockVector3 max=rg.getMaximumPoint();
+				BlockVector3 min=rg.getMinimumPoint();
+				String s=""+max.getBlockX()+" "+max.getBlockY()+" "+max.getBlockZ()+" "+min.getBlockX()+" "+min.getBlockY()+" "+min.getBlockZ()+" "+loc.getWorld().getName().toString();
+				ShopLogging.getResults("LocationBetween",s,((Player)sender));
+				
+			
+		  }
+	  }
+	  else {
 			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
 		  }
 		  return true;

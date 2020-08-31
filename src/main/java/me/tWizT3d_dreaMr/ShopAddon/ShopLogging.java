@@ -228,6 +228,15 @@ public ShopLogging(String host,int port, String database,String username,String 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+	  	}else if(field.equals("LocationBetween")) {
+	  		String[] loc=toLookup.split(" ");
+	  		try {
+				System.out.print(loc[1]);
+				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE SignX < "+loc[0]+" AND SignX > "+loc[3]+" and SignY < "+loc[1]+" AND SignY >"+loc[4]+" and SignZ < "+loc[2]+" AND SignZ > "+loc[5]+" and SignWorld = '"+loc[6]+"';");
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 	  	}else
 	  		try {PreparedStatement preparedStatement =
 	  		        connection.prepareStatement("SELECT * FROM ShopTransaction WHERE "+field+" = ?;");
