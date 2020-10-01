@@ -6,7 +6,7 @@
 
     <groupId>me.tWizT3d_dreaMr</groupId>
     <artifactId>ShopAddon-1.16</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
