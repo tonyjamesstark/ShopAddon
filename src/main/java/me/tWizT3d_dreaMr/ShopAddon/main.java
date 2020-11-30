@@ -131,7 +131,16 @@ public List<String> onTabComplete(CommandSender sender , Command cmd, String Com
 	return null;
 	}
 public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	  if(command.getName().equalsIgnoreCase("ShopNotifications")) {
 
+			  if(!(sender instanceof Player)) {
+				  sender.sendMessage("You cant change your notification settings");
+				  return true;
+			  }
+			  NotificationCommand.Command((Player)sender, args);
+	
+		  return true;
+	  }
 	  if (command.getName().equalsIgnoreCase("SA"))
 	  { 	if(!(sender instanceof Player)) {
 		  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));
