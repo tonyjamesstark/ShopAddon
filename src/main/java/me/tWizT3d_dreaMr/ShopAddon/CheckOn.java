@@ -3,7 +3,7 @@ package me.tWizT3d_dreaMr.ShopAddon;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import com.snowgears.shop.AbstractShop;
+import com.snowgears.shop.shop.AbstractShop;
 import com.snowgears.shop.event.PlayerInitializeShopEvent;
 
 

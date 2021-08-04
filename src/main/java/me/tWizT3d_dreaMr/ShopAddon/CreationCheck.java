@@ -8,7 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.snowgears.shop.ShopType;
+import com.snowgears.shop.shop.ShopType;
 
 public class CreationCheck {
 private YamlConfiguration listfile;

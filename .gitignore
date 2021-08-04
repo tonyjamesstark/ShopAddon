@@ -8,3 +8,5 @@
 *.lst
 target/classes/plugin.yml
 target/classes/plugin.yml
+/bin/
+/target/
