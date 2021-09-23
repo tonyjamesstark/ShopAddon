@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.snowgears.shop.shop.ShopType;
 
+
 public class CreationCheck {
 private YamlConfiguration listfile;
 private boolean whitelist;
@@ -26,9 +27,10 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 	for(String sec:section.getKeys(false)) {
 		ConfigurationSection testfor=listfile.getConfigurationSection("itemListing."+sec);
 			//material check
-			if(testfor.contains("shoptype"))
-				if(!st.toString().equalsIgnoreCase(testfor.getString("shoptype"))||!("all".equalsIgnoreCase(testfor.getString("shoptype"))))
+			if(testfor.contains("shoptype")) 
+				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())) 
 					continue;
+			
 			//material check
 			if(testfor.getString("material")==null) 
 				continue;

@@ -3,8 +3,9 @@ package me.tWizT3d_dreaMr.ShopAddon;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import com.snowgears.shop.shop.AbstractShop;
+
 import com.snowgears.shop.event.PlayerInitializeShopEvent;
+import com.snowgears.shop.shop.AbstractShop;
 
 
 public class CheckOn implements Listener {
@@ -14,6 +15,7 @@ public class CheckOn implements Listener {
 	    	CreationCheck ItemList= main.getCreationCheck();
 	    	AbstractShop shop=event.getShop();
 	    	String type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), shop.getPrice(), shop.getAmount(),shop.getType());
+	    	System.out.println(type);
 	    	if(!type.equals("none")) {
 	    		event.setCancelled(true);
 	    		shop.delete();
