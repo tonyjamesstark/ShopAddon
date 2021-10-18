@@ -20,6 +20,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import com.snowgears.shop.event.PlayerExchangeShopEvent;
 
 import net.md_5.bungee.api.ChatColor;
@@ -31,7 +33,7 @@ public class ShopLogging implements Listener {
 	  private static Statement statement;
 	  private static ArrayList<String> checkers;
 	  private static ArrayList<LoggingPlayer> LPS;
-public ShopLogging(String host,int port, String database,String username,String password) {
+public ShopLogging(String host,int port, String database,String username,String password) throws ClassNotFoundException, SQLException {
 		checkers=new ArrayList<String>();
 		LPS=new ArrayList<LoggingPlayer>();
 	  	this.host=host;
@@ -39,34 +41,20 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	this.database=database;
 	  	this.username=username;
 	  	this.password=password;
-	  	try {
-	  		openConnection();
-	          statement = connection.createStatement();  
-	  	} catch (ClassNotFoundException e) {
-	  		e.printStackTrace();
-	  	} catch (SQLException e) {
-	  		e.printStackTrace();
-	  	}
-	  	try {
+	  	openConnection();
 	  		statement.execute("CREATE TABLE IF NOT EXISTS ShopTransaction (PlayerUUID varchar(50),PlayerName varchar(50), Type varchar(200), "
 	  				+ "Price varchar(100), ItemName varchar(1000), ItemLore varchar(10000), Time varchar(100), SignX int(255), SignY int(255), SignZ int(255), SignWorld varchar(100))");
-	  		} catch (SQLException e) {
-	  		// TODO Auto-generated catch block
-	  		e.printStackTrace();
-	  	}
 	  }
 	  public void openConnection() throws ClassNotFoundException, SQLException {
-	      if (connection != null && !connection.isClosed()) {
-	          return;
-	      }
-	   
-	      synchronized (this) {
-	          if (connection != null && !connection.isClosed()) {
-	              return;
-	          }
-	          Class.forName("com.mysql.jdbc.Driver");
-	          connection = DriverManager.getConnection("jdbc:mysql://" + this.host+ ":" + this.port + "/" + this.database, this.username, this.password);
-	      }
+		  	MysqlDataSource dataSource = new MysqlConnectionPoolDataSource();
+		  	dataSource.setServerName(this.host);
+		  	dataSource.setPort(this.port);
+		  	dataSource.setDatabaseName(this.database);
+		  	dataSource.setUser(this.username);
+		  	dataSource.setPassword(this.password);
+		  	connection = dataSource.getConnection();
+	          
+	      
 	  }
 	  public static void add(Player p) {
 		  if(checkers.contains(p.getUniqueId().toString())) {

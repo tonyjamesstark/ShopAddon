@@ -2,6 +2,7 @@ package me.tWizT3d_dreaMr.ShopAddon;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,10 +99,20 @@ public void onEnable()  {
 	config=getConfig();
 	Bukkit.getPluginManager().registerEvents(new CheckOn(),this);
 	
-	if(getConfig().getBoolean("Logging.Enable")){	
-		ConfigurationSection s=getConfig().getConfigurationSection("Logging.SQL");
-		Bukkit.getPluginManager().registerEvents(new ShopLogging(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password")),this);
-	}
+	if(getConfig().getBoolean("Logging.Enable"))
+		try {
+			{	
+				ConfigurationSection s=getConfig().getConfigurationSection("Logging.SQL");
+				Bukkit.getPluginManager().registerEvents(new ShopLogging(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password")),this);
+				
+			}
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     if(getConfig().getString("WhitelistItems").equalsIgnoreCase("true"))
     	wh=true;
     
