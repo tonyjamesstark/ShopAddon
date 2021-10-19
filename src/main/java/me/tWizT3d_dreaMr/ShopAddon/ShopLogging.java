@@ -26,6 +26,7 @@ import com.snowgears.shop.event.PlayerExchangeShopEvent;
 
 import net.md_5.bungee.api.ChatColor;
 
+
 public class ShopLogging implements Listener {
 	  private static Connection connection;
 	  private String host, database, username, password;
@@ -42,20 +43,40 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	this.username=username;
 	  	this.password=password;
 	  	openConnection();
+	  	statement = connection.createStatement(); 
 	  		statement.execute("CREATE TABLE IF NOT EXISTS ShopTransaction (PlayerUUID varchar(50),PlayerName varchar(50), Type varchar(200), "
 	  				+ "Price varchar(100), ItemName varchar(1000), ItemLore varchar(10000), Time varchar(100), SignX int(255), SignY int(255), SignZ int(255), SignWorld varchar(100))");
 	  }
-	  public void openConnection() throws ClassNotFoundException, SQLException {
-		  	MysqlDataSource dataSource = new MysqlConnectionPoolDataSource();
-		  	dataSource.setServerName(this.host);
-		  	dataSource.setPort(this.port);
-		  	dataSource.setDatabaseName(this.database);
-		  	dataSource.setUser(this.username);
-		  	dataSource.setPassword(this.password);
-		  	connection = dataSource.getConnection();
-	          
-	      
-	  }
+
+	public void openConnection() throws ClassNotFoundException
+	{
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		}
+		catch (ClassNotFoundException classNotFoundException)
+		{
+			try{
+			Class.forName("com.mysql.jdbc.Driver");
+			}
+			catch (ClassNotFoundException classNotFoundException2)
+			{
+				System.out.println("DoublFail");
+			}
+		}
+		try
+		{
+		this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?" + 
+		        "&autoReconnect=true&wait_timeout=31536000&interactive_timeout=31536000&useUnicode=true&characterEncoding=utf8&useSSL=" + 
+		        "false", this.username, this.password);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Failed Database Connection: " + e);
+		}
+		
+	}
+
+	  
 	  public static void add(Player p) {
 		  if(checkers.contains(p.getUniqueId().toString())) {
 			  checkers.remove(p.getUniqueId().toString());

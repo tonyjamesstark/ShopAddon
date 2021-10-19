@@ -57,7 +57,7 @@ public void onEnable()  {
     	getConfig().addDefault("Interaction.pricemax", "&#952f39Your item is too expensive");
     	getConfig().addDefault("Interaction.blacklist", "&#952f39That item can not be sold");
     	getConfig().addDefault("Interaction.whitelist", "&#952f39That item can not be sold");
-    	getConfig().addDefault("Logging.Enable", "false");
+    	getConfig().addDefault("Logging.Enable", false);
     	getConfig().addDefault("Logging.Format", "%NUM%: &cDate %DATE%;&dUUID %UUID%;"
     			+ "&cName %NAME% Material %MATERIAL% Price %PRICE%;&dItemName %INAME% ItemLore %ILORE%;"
     			+ "&cSign Location %SIGNX%, %SIGNY%, %SIGNZ%, %SIGNWORLD%");
