@@ -38,6 +38,11 @@
             <systemPath>${project.basedir}/Shop.jar</systemPath>
         </dependency>
         <dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+		    <version>8.0.26</version>
+		</dependency>
+        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.4-SNAPSHOT</version>
