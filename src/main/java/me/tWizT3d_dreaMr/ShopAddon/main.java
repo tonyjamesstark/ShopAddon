@@ -159,7 +159,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 	
 		  return true;
 	  }
-	  if(command.getName().equalsIgnoreCase("SQLConversion")) {
+	  if(command.getName().equalsIgnoreCase("SASQLConversion")) {
 
 		  if((sender instanceof Player)) {
 			  sender.sendMessage("You cant convert");

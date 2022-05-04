@@ -1,7 +1,7 @@
 name: ShopAddon
 
 main: me.tWizT3d_dreaMr.ShopAddon.main
-version: 1.2.6
+version: 1.2.7
 author: tWizT3d_dreaMr
 api-version: 1.17
 depend: [ Shop ]
@@ -13,3 +13,6 @@ commands:
    ShopNotifications:
       description: Changes your shop notification settings
       usage: ShopNotifications
+   SASQLConversion:
+      description: Converts my logging to official logging
+      usage: SASQLConversion
