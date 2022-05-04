@@ -22,6 +22,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.snowgears.shop.Shop;
 
 
 
@@ -30,8 +31,11 @@ public class main extends JavaPlugin {
 	private YamlConfiguration con;
 	private static FileConfiguration config;
 	public static JavaPlugin plugin;
+	public static Shop Shop;
 public void onEnable()  {
 	plugin=this;
+	Shop=com.snowgears.shop.Shop.getPlugin();
+	
     File bwconfigFile = new File(getDataFolder(), "itemlist.yml");
     if (!bwconfigFile.exists()) {
     	bwconfigFile.getParentFile().mkdirs();
@@ -102,8 +106,8 @@ public void onEnable()  {
 	if(getConfig().getBoolean("Logging.Enable"))
 		try {
 			{	
-				ConfigurationSection s=getConfig().getConfigurationSection("Logging.SQL");
-				Bukkit.getPluginManager().registerEvents(new ShopLogging(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password")),this);
+				Bukkit.getPluginManager().registerEvents(new ShopLogging(Shop), null);
+				//Bukkit.getPluginManager().registerEvents(new ShopLogging(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password")),this);
 				
 			}
 		} catch (ClassNotFoundException e) {
@@ -141,6 +145,9 @@ public List<String> onTabComplete(CommandSender sender , Command cmd, String Com
 		}
 	return null;
 	}
+public static Shop getShop() {
+	return Shop;
+}
 public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 	  if(command.getName().equalsIgnoreCase("ShopNotifications")) {
 
@@ -152,6 +159,24 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 	
 		  return true;
 	  }
+	  if(command.getName().equalsIgnoreCase("SQLConversion")) {
+
+		  if((sender instanceof Player)) {
+			  sender.sendMessage("You cant convert");
+			  return true;
+		  }
+			ConfigurationSection s=getConfig().getConfigurationSection("Logging.SQL");
+		  try {
+			new ConversionClass(s.getString("host"),s.getInt("port"),s.getString("database"),s.getString("username"),s.getString("password"));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		  ConversionClass.conversion();
+
+	  return true;
+  }
 	  if (command.getName().equalsIgnoreCase("SA"))
 	  { 	if(!(sender instanceof Player)) {
 		  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));

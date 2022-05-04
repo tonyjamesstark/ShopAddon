@@ -12,16 +12,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.snowgears.shop.event.PlayerExchangeShopEvent;
-
+import com.snowgears.shop.Shop;
 import net.md_5.bungee.api.ChatColor;
 
 
@@ -32,18 +31,17 @@ public class ShopLogging implements Listener {
 	  private static Statement statement;
 	  private static ArrayList<String> checkers;
 	  private static ArrayList<LoggingPlayer> LPS;
-public ShopLogging(String host,int port, String database,String username,String password) throws ClassNotFoundException, SQLException {
+public ShopLogging(Shop Shop) throws ClassNotFoundException, SQLException {
 		checkers=new ArrayList<String>();
 		LPS=new ArrayList<LoggingPlayer>();
-	  	this.host=host;
-	  	this.port=port;
-	  	this.database=database;
-	  	this.username=username;
-	  	this.password=password;
+    	FileConfiguration shopConfig=main.getShop().getConfig();
+        host = shopConfig.getString("logging.serverName");
+        database = shopConfig.getString("logging.databaseName");
+        port = shopConfig.getInt("logging.port");
+        username = shopConfig.getString("logging.user");
+        password = shopConfig.getString("logging.password");
 	  	openConnection();
 	  	statement = connection.createStatement(); 
-	  		statement.execute("CREATE TABLE IF NOT EXISTS ShopTransaction (PlayerUUID varchar(50),PlayerName varchar(50), Type varchar(200), "
-	  				+ "Price varchar(100), ItemName varchar(1000), ItemLore varchar(10000), Time varchar(100), SignX int(255), SignY int(255), SignZ int(255), SignWorld varchar(100))");
 	  }
 
 	public void openConnection() throws ClassNotFoundException
@@ -103,60 +101,8 @@ public ShopLogging(String host,int port, String database,String username,String 
 		event.setCancelled(true);
 		checkers.remove(event.getPlayer().getUniqueId().toString());
 	}
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
-	public void logShop(PlayerExchangeShopEvent event) {
-		long time=System.currentTimeMillis();
-		Location l=event.getShop().getSignLocation();
-		int x=l.getBlockX();
-		int y=l.getBlockY();
-		int z=l.getBlockZ();
-		String world=l.getWorld().getName().toString();
-		String price=event.getShop().getPriceString();
-		ItemStack item=event.getShop().getItemStack();
-		String itemMat=item.getType().toString();
-		String itemNametemp="none";
-		String itemLoretemp="none";
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasDisplayName()) {
-				itemNametemp=item.getItemMeta().getDisplayName();
-			}if(item.getItemMeta().hasLore()) {
-				itemLoretemp=item.getItemMeta().getLore().toString();
-			}
-		}
-		String itemName=itemNametemp;
-		String itemLore=itemLoretemp;
-		String buyerUUID=event.getPlayer().getUniqueId().toString();
-		String buyername=event.getPlayer().getName();
-		BukkitRunnable r=new BukkitRunnable() {
-	  	    @Override
-	  	    public void run() {
-	  	    	try {
-	  	    		PreparedStatement preparedStatement =
-	  	    		        connection.prepareStatement("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ("
-	  		  	    				+"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-  	    			preparedStatement.setString(1, buyerUUID);
-  	    			preparedStatement.setString(2, buyername);	  	    		
-  	    			preparedStatement.setString(3, itemMat);
-  	    			preparedStatement.setString(4, price);		
-  	    			preparedStatement.setString(5, itemName);
-  	    			preparedStatement.setString(6, itemLore);		
-  	    			preparedStatement.setString(7, ""+time);
-  	    			preparedStatement.setInt(8, x);		
-  	    			preparedStatement.setInt(9, y);
-  	    			preparedStatement.setInt(10, z);
-  	    			preparedStatement.setString(11, world);
-  	    			preparedStatement.executeUpdate();
-	  	    		//statement.executeUpdate("INSERT INTO ShopTransaction (PlayerUUID, PlayerName, Type, Price, ItemName, ItemLore, time, SignX, SignY, SignZ, SignWorld) VALUES ('"
-	  	    		//		+buyerUUID+"', '"+buyername+"', '"+itemMat+"', '"+price+"', '"+itemName+"', '"+itemLore+"', '"+time+"', '"+x+"', '"+y+"', '"+z+"', '"++"');");
-	  	    	} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	  	 }
-		};
-		r.runTaskAsynchronously(main.plugin);
-
-	}
+	
+	
 	public static void sendPage(int i, Player p) {
 		for(LoggingPlayer LP:LPS) {
 			if(LP.isName(p.getName())) {
@@ -240,7 +186,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  	if(field.equals("Location")) {
 	  		String[] loc=toLookup.split(" ");
 	  		try {
-				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE SignX = "+loc[0]+" and SignY = "+loc[1]+" and SignZ = "+loc[2]+" and SignWorld = '"+loc[3]+"';");
+				result = statement.executeQuery("SELECT * FROM shop_action RIGHT JOIN shop_transaction on shop_action.transaction_id = shop_transaction.id WHERE shop_x = "+loc[0]+" and shop_y = "+loc[1]+" and shop_z = "+loc[2]+" and shop_world = '"+loc[3]+"';");
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -249,15 +195,29 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  		String[] loc=toLookup.split(" ");
 	  		try {
 				System.out.print(loc[1]);
-				result = statement.executeQuery("SELECT * FROM ShopTransaction WHERE SignX < "+loc[0]+" AND SignX > "+loc[3]+" and SignY < "+loc[1]+" AND SignY >"+loc[4]+" and SignZ < "+loc[2]+" AND SignZ > "+loc[5]+" and SignWorld = '"+loc[6]+"';");
+				result = statement.executeQuery("SELECT * FROM shop_action RIGHT JOIN shop_transaction on shop_action.transaction_id = shop_transaction.id WHERE shop_x < "+loc[0]+" AND shop_x > "+loc[3]+" and shop_y < "+loc[1]+" AND shop_y >"+loc[4]+" and shop_z < "+loc[2]+" AND shop_z > "+loc[5]+" and shop_world = '"+loc[6]+"';");
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 	  	}else
 	  		try {PreparedStatement preparedStatement =
-	  		        connection.prepareStatement("SELECT * FROM ShopTransaction WHERE "+field+" = ?;");
+	  		        connection.prepareStatement("SELECT * FROM shop_action RIGHT JOIN shop_transaction on shop_action.transaction_id = shop_transaction.id WHERE "+field+" = ?;");
   			preparedStatement.setString(1, toLookup);
+	  		result= preparedStatement.executeQuery();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+		
+		return result;
+		
+	}	public static ResultSet allResults(){
+	  	ResultSet result=null;
+	  	
+	  		try {PreparedStatement preparedStatement =
+	  		        connection.prepareStatement("SELECT * FROM shop_action RIGHT JOIN shop_transaction on shop_action.transaction_id = shop_transaction.id");
 	  		result= preparedStatement.executeQuery();
 	
 			} catch (SQLException e) {

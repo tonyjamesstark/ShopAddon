@@ -35,7 +35,7 @@
             <artifactId>Shop</artifactId>
             <scope>system</scope>
             <version>any</version>
-            <systemPath>${project.basedir}/Shop.jar</systemPath>
+            <systemPath>C:/Shop.jar</systemPath>
         </dependency>
         <dependency>
     		<groupId>mysql</groupId>
