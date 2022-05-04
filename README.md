@@ -1,6 +1,7 @@
 # ShopAddon
 
-Adds Shop logging item Blacklisting and item Whitelisting, as well as price fixing.
+Adds item Blacklisting and item Whitelisting, as well as price fixing.
+And adds shop logging lookups
 
 
 
