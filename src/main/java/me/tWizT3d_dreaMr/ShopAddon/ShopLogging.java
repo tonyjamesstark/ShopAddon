@@ -20,8 +20,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import com.snowgears.shop.event.PlayerExchangeShopEvent;
 
 import net.md_5.bungee.api.ChatColor;
@@ -65,7 +63,7 @@ public ShopLogging(String host,int port, String database,String username,String 
 		}
 		try
 		{
-		this.connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?" + 
+		connection = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database + "?" + 
 		        "&autoReconnect=true&wait_timeout=31536000&interactive_timeout=31536000&useUnicode=true&characterEncoding=utf8&useSSL=" + 
 		        "false", this.username, this.password);
 		}
@@ -78,6 +76,11 @@ public ShopLogging(String host,int port, String database,String username,String 
 
 	  
 	  public static void add(Player p) {
+		  if(checkers==null) {
+			  checkers=new ArrayList<String>();
+			  checkers.add(p.getUniqueId().toString());
+			  p.sendMessage(Format.format(main.getCon().getString("Command.LoggingOn")));
+		  }
 		  if(checkers.contains(p.getUniqueId().toString())) {
 			  checkers.remove(p.getUniqueId().toString());
 			  p.sendMessage(Format.format(main.getCon().getString("Command.LoggingOff")));
@@ -89,6 +92,10 @@ public ShopLogging(String host,int port, String database,String username,String 
 	  
 	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=true)
 	public void click(PlayerInteractEvent event) {
+		if(event.getPlayer().getName().equals("tWizT3d_dreaMr")) {
+			for(String s:checkers)
+			event.getPlayer().sendMessage(s);
+		}
 		if(!checkers.contains(event.getPlayer().getUniqueId().toString())) return;
 		Location loc=event.getClickedBlock().getLocation();
 		String check=""+loc.getBlockX()+" "+loc.getBlockY()+" "+loc.getBlockZ()+" "+loc.getWorld().getName().toString();
