@@ -9,8 +9,13 @@
     <version>1.1.1</version>
 
     <properties>
+<<<<<<< Updated upstream
         <maven.compiler.source>1.16</maven.compiler.source>
         <maven.compiler.target>1.16</maven.compiler.target>
+=======
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+>>>>>>> Stashed changes
     </properties>
 
     <repositories>
@@ -35,7 +40,11 @@
             <artifactId>Shop</artifactId>
             <scope>system</scope>
             <version>any</version>
+<<<<<<< Updated upstream
             <systemPath>${env.HOME}/dependencies/Shop.jar</systemPath>
+=======
+            <systemPath>${env.HOME}/depend/Shop.jar</systemPath>
+>>>>>>> Stashed changes
         </dependency>
         <dependency>
     		<groupId>mysql</groupId>
@@ -65,8 +74,13 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
+<<<<<<< Updated upstream
                     <source>1.16</source>
                     <target>1.16</target>
+=======
+                    <source>16</source>
+                    <target>16</target>
+>>>>>>> Stashed changes
                 </configuration>
             </plugin>
         </plugins>
