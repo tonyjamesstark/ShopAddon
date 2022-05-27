@@ -24,6 +24,9 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.snowgears.shop.Shop;
 
+import me.tWizT3d_dreaMr.Gui.Guis;
+import me.tWizT3d_dreaMr.Gui.guiListener;
+
 
 
 public class main extends JavaPlugin {
@@ -77,31 +80,35 @@ public void onEnable()  {
         getConfig().addDefault("Command.NotAArgumentr", "&cThat isn't a valid Argument!");
         getConfig().addDefault("Command.LoggingOn", "&aCheck logging on!");
         getConfig().addDefault("Command.LoggingOff", "&cCheck logging off!");
-    	getConfig().options().copyDefaults(true);
-    	saveConfig();
     }
     if(getConfig().get("Command.NotAArgument")==null) {
         getConfig().addDefault("Command.NotAArgument", "&cThat isn't a valid Argument!");
-        getConfig().options().copyDefaults(true);
-    	saveConfig();
     }if(getConfig().get("WorldGuard")==null) {
         getConfig().addDefault("Command.RegionDoesntExist", "&cRegion doesnt exist!");
         getConfig().addDefault("Command.WorldGuardNotEnabled", "&cWorldguard support not enabled!");
     	getConfig().addDefault("WorldGuard", false);
-        getConfig().options().copyDefaults(true);
-    	saveConfig();
+    	getConfig().addDefault("Gui", false);
     }
+
+
     if(getConfig().getBoolean("WorldGuard")) {
     	if(!getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
 
     		getLogger().info("WorldGuard enabled in config and worldguard not enabled on server. Disabling worldguard support");
     		getConfig().set("WorldGuard", false);
-    		saveConfig();
     	}
     		
     }
+    getConfig().addDefault("Gui", false);
+    getConfig().options().copyDefaults(true);
+	saveConfig();
 	config=getConfig();
 	Bukkit.getPluginManager().registerEvents(new CheckOn(),this);
+	
+	if(config.getBoolean("Gui")) {
+		Guis.type= Shop.getCurrencyType();
+		Bukkit.getPluginManager().registerEvents(new guiListener(),this);
+	}
 	
 	if(getConfig().getBoolean("Logging.Enable"))
 		try {
