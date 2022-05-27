@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.Gui;
+package me.tWizT3d_dreaMr.ShopAddon.Gui;
 
 import java.util.ArrayList;
 

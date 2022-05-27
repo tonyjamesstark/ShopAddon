@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddon.Logging;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import me.tWizT3d_dreaMr.ShopAddon.main;
 
 
 public class ConversionClass {

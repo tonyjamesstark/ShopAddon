@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddon.Listeners;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,6 +20,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import me.tWizT3d_dreaMr.ShopAddon.main;
+import me.tWizT3d_dreaMr.ShopAddon.Logging.LoggingPlayer;
+import me.tWizT3d_dreaMr.ShopAddon.Format;
 import com.snowgears.shop.Shop;
 import net.md_5.bungee.api.ChatColor;
 
@@ -154,7 +157,6 @@ public ShopLogging(Shop Shop) throws ClassNotFoundException, SQLException {
 						ret.add(form);
 					}
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				LoggingPlayer LP=new LoggingPlayer(ret,p.getName());

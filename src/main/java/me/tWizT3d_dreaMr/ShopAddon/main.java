@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -24,8 +26,12 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.snowgears.shop.Shop;
 
-import me.tWizT3d_dreaMr.Gui.Guis;
-import me.tWizT3d_dreaMr.Gui.guiListener;
+import me.tWizT3d_dreaMr.ShopAddon.Gui.Guis;
+import me.tWizT3d_dreaMr.ShopAddon.Listeners.CheckOn;
+import me.tWizT3d_dreaMr.ShopAddon.Listeners.ShopLogging;
+import me.tWizT3d_dreaMr.ShopAddon.Listeners.guiListener;
+import me.tWizT3d_dreaMr.ShopAddon.Logging.ConversionClass;
+import me.tWizT3d_dreaMr.ShopAddon.Logging.LoggingPlayer;
 
 
 
@@ -34,6 +40,12 @@ public class main extends JavaPlugin {
 	private YamlConfiguration con;
 	private static FileConfiguration config;
 	public static JavaPlugin plugin;
+	public static Material Confirm;
+	public static Material TransAmount;
+	public static Material Default;
+	public static Material NotStock;
+	public static Material NotMoney;
+	public static Material TransOut;
 	public static Shop Shop;
 public void onEnable()  {
 	plugin=this;
@@ -87,7 +99,6 @@ public void onEnable()  {
         getConfig().addDefault("Command.RegionDoesntExist", "&cRegion doesnt exist!");
         getConfig().addDefault("Command.WorldGuardNotEnabled", "&cWorldguard support not enabled!");
     	getConfig().addDefault("WorldGuard", false);
-    	getConfig().addDefault("Gui", false);
     }
 
 
@@ -99,13 +110,20 @@ public void onEnable()  {
     	}
     		
     }
-    getConfig().addDefault("Gui", false);
+    getConfig().addDefault("Gui.Active", false);
+    getConfig().addDefault("Gui.Material.Confirm", "LIME_STAINED_GLASS_PANE");
+    getConfig().addDefault("Gui.Material.TransAmount", "GREEN_STAINED_GLASS_PANE");
+    getConfig().addDefault("Gui.Material.TransOut", "RED_STAINED_GLASS_PANE");
+    getConfig().addDefault("Gui.Material.Default", "BLACK_STAINED_GLASS_PANE");
+    getConfig().addDefault("Gui.Material.NotStock", "WHITE_STAINED_GLASS_PANE");
+    getConfig().addDefault("Gui.Material.NotMoney", "WHITE_STAINED_GLASS_PANE");
     getConfig().options().copyDefaults(true);
 	saveConfig();
 	config=getConfig();
 	Bukkit.getPluginManager().registerEvents(new CheckOn(),this);
 	
-	if(config.getBoolean("Gui")) {
+	if(config.getBoolean("Gui.Active") && areAble()) {
+
 		Guis.type= Shop.getCurrencyType();
 		Bukkit.getPluginManager().registerEvents(new guiListener(),this);
 	}
@@ -129,6 +147,22 @@ public void onEnable()  {
     
     creationCheck=new CreationCheck(con,wh);        
 
+}
+private boolean areAble() {
+	Confirm=Material.getMaterial(getConfig().getString("Gui.Material.Confirm"));
+	TransAmount=Material.getMaterial(getConfig().getString("Gui.Material.TransAmount"));
+	Default=Material.getMaterial(getConfig().getString("Gui.Material.Confirm"));
+	NotStock=Material.getMaterial(getConfig().getString("Gui.Material.NotStock"));
+	NotMoney=Material.getMaterial(getConfig().getString("Gui.Material.NotMoney"));
+	TransOut=Material.getMaterial(getConfig().getString("Gui.Material.TransOut"));
+	
+	if(Confirm==null || TransAmount==null || Default==null || 
+			NotStock==null || NotMoney==null) {
+		Bukkit.getLogger().log(Level.SEVERE, "One of gui items are null not using");
+		return false;
+	}
+	
+	return true;
 }
 public List<String> onTabComplete(CommandSender sender , Command cmd, String CommandLabel, String[] args){
 	if(cmd.getName().equalsIgnoreCase("SA")) {

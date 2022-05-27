@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.Gui;
+package me.tWizT3d_dreaMr.ShopAddon.Listeners;
 
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.WallSign;
@@ -15,6 +15,10 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import com.snowgears.shop.util.ShopAction;
 import com.snowgears.shop.util.ShopClickType;
+
+import me.tWizT3d_dreaMr.ShopAddon.Gui.Gui;
+import me.tWizT3d_dreaMr.ShopAddon.Gui.Guis;
+
 import com.snowgears.shop.Shop;
 import com.snowgears.shop.shop.AbstractShop;
 

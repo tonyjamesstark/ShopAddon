@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddon.Listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -6,6 +6,10 @@ import org.bukkit.event.Listener;
 
 import com.snowgears.shop.event.PlayerInitializeShopEvent;
 import com.snowgears.shop.shop.AbstractShop;
+
+import me.tWizT3d_dreaMr.ShopAddon.CreationCheck;
+import me.tWizT3d_dreaMr.ShopAddon.Format;
+import me.tWizT3d_dreaMr.ShopAddon.main;
 
 
 public class CheckOn implements Listener {

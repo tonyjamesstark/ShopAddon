@@ -1,6 +1,8 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddon.Logging;
 
 import java.util.ArrayList;
+
+import me.tWizT3d_dreaMr.ShopAddon.main;
 
 public class LoggingPlayer {
 private ArrayList<String> al;

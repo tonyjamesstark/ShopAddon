@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.Gui;
+package me.tWizT3d_dreaMr.ShopAddon.Gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,6 +14,7 @@ import com.snowgears.shop.Shop;
 import com.snowgears.shop.shop.AbstractShop;
 import com.snowgears.shop.util.CurrencyType;
 
+import me.tWizT3d_dreaMr.ShopAddon.main;
 import net.md_5.bungee.api.ChatColor;
 
 public class Gui {
@@ -40,7 +41,7 @@ public class Gui {
 				inventory.setItem(i, getPrice(i));
 			
 			else if(i==26||i==0||i==18||i==9||i==0||i==17||i==8) {
-				ItemStack item= new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+				ItemStack item= new ItemStack(main.Confirm);
 				ItemMeta meta= item.getItemMeta();
 				meta.setDisplayName(ChatColor.GREEN+"Confirm "+ shop.getType().name().toLowerCase()+".");
 				item.setItemMeta(meta);
@@ -50,7 +51,7 @@ public class Gui {
 			else if(i==13)
 				inventory=set13(inventory);
 			
-			else inventory.setItem(i, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+			else inventory.setItem(i, new ItemStack(main.Default));
 		}
 		
 		
@@ -66,11 +67,11 @@ public class Gui {
 		int amount= shop.getStock();
 		ItemStack i;
 		if(amount>64)
-			i= new ItemStack(Material.GREEN_STAINED_GLASS_PANE, 64);
+			i= new ItemStack(main.TransAmount, 64);
 		else if(amount==0)
-			i= new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+			i= new ItemStack(main.TransOut, 1);
 		else
-			i= new ItemStack(Material.GREEN_STAINED_GLASS_PANE, amount);
+			i= new ItemStack(main.TransAmount, amount);
 		ItemMeta meta=i.getItemMeta();
 		meta.setDisplayName(ChatColor.AQUA+"This shop has "+ChatColor.WHITE+amount+ChatColor.AQUA+" transactions left.");
 		i.setItemMeta(meta);
@@ -78,7 +79,7 @@ public class Gui {
 		return inventory;
 	}
 	private ItemStack getItems(int i) {
-		ItemStack item=new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+		ItemStack item=new ItemStack(main.NotStock);
 		
 		if(shop.getAmount() < 64) {
 			if(i==10||i==11)
@@ -117,7 +118,7 @@ public class Gui {
 		return item;
 	}
 	private ItemStack getPrice(int i) {
-		ItemStack defItem=new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+		ItemStack defItem=new ItemStack(main.NotMoney);
 		ItemStack item= defItem;
 		CurrencyType type=Guis.getCurrencyType();
 		if(type==CurrencyType.ITEM) {
