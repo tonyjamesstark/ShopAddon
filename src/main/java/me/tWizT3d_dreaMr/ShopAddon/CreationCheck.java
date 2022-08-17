@@ -1,7 +1,5 @@
 package me.tWizT3d_dreaMr.ShopAddon;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.Scanner;
 
 import org.bukkit.Bukkit;
@@ -26,14 +24,11 @@ public CreationCheck(YamlConfiguration from,boolean wh) {
 
 public String testfor(ItemStack i, double price, int amount,ShopType st) {
 	if(i == null) return "none";
-	Logger log=Bukkit.getLogger();
-	log.log(Level.INFO,"Testfor Line 30");
 	ConfigurationSection section = listfile.getConfigurationSection("itemListing");
 	for(String sec:section.getKeys(false)) {
 		ConfigurationSection testfor=listfile.getConfigurationSection("itemListing."+sec);
 			//material check
 			if(testfor.contains("shoptype")) {
-				log.log(Level.INFO, "Testfor Line 36 st= "+st.toString().toUpperCase());
 				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())) 
 					continue;
 			}
@@ -41,8 +36,6 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 			if(testfor.getString("material")==null) 
 				continue;
 
-			log.log(Level.INFO, "Testfor Line 44 "+testfor.getString("material"));
-			log.log(Level.INFO, "Testfor Line 45 "+i.getType().toString());
 			if(i.getType() != Material.getMaterial(testfor.getString("material").toUpperCase())) continue;
 			
 			//lorecheck
@@ -65,7 +58,6 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 					} else continue;
 				} else continue;
 			}
-			log.log(Level.INFO, "Testfor Line 68 match ");
 			//ListType is important
 			if(testfor.getString("ListType") != null) {
 				String type=testfor.getString("ListType");
@@ -84,7 +76,6 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 					}
 					if(testfor.get("pricemin")!=null) {
 						String min=testfor.getString("pricemin");
-						log.log(Level.INFO, "Testfor Line 87 "+min);
 						Scanner t=new Scanner(min);
 						int minamount=1;
 						double minprice=1;
@@ -100,8 +91,6 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 							break;}
 						t.close();
 						Double minrat=minprice/minamount;
-						log.log(Level.INFO, "Testfor Line 103 "+minrat);
-						log.log(Level.INFO, "Testfor Line 104 "+rat);
 						if(rat<=minrat) {
 							return "pricemin";}
 				}

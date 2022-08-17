@@ -19,7 +19,6 @@ public class CheckOn implements Listener {
 	    	CreationCheck ItemList= main.getCreationCheck();
 	    	AbstractShop shop=event.getShop();
 	    	String type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), shop.getPrice(), shop.getAmount(),shop.getType());
-	    	System.out.println(type);
 	    	if(!type.equals("none")) {
 	    		event.setCancelled(true);
 	    		shop.delete();
