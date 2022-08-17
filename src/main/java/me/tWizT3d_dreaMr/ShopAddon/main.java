@@ -34,7 +34,6 @@ import me.tWizT3d_dreaMr.ShopAddon.Logging.ConversionClass;
 import me.tWizT3d_dreaMr.ShopAddon.Logging.LoggingPlayer;
 
 
-
 public class main extends JavaPlugin {
 	private static CreationCheck creationCheck;
 	private YamlConfiguration con;
@@ -174,7 +173,7 @@ public List<String> onTabComplete(CommandSender sender , Command cmd, String Com
 		if(args.length==2) {
 			if(sender instanceof Player) {
 			LoggingPlayer lp=ShopLogging.getLoggingPlayer((Player)sender);
-			if(lp!=null){
+			if(lp!=null) {
 				for(int i=1; i<=lp.getPageAmount();i++)
 					ret.add(""+i);
 			}
