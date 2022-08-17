@@ -2,7 +2,6 @@ package me.tWizT3d_dreaMr.ShopAddon;
 
 import java.util.Scanner;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,7 +28,7 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 		ConfigurationSection testfor=listfile.getConfigurationSection("itemListing."+sec);
 			//material check
 			if(testfor.contains("shoptype")) {
-				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())) 
+				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())&&!st.toString().toUpperCase().equals("ALL")) 
 					continue;
 			}
 			//material check
