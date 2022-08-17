@@ -28,7 +28,7 @@ public String testfor(ItemStack i, double price, int amount,ShopType st) {
 		ConfigurationSection testfor=listfile.getConfigurationSection("itemListing."+sec);
 			//material check
 			if(testfor.contains("shoptype")) {
-				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())&&!st.toString().toUpperCase().equals("ALL")) 
+				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())&&!testfor.getString("shoptype").toUpperCase().equals("ALL")) 
 					continue;
 			}
 			//material check
