@@ -20,13 +20,13 @@ public class CheckOn implements Listener {
 	    public void onShopCreate(PlayerInitializeShopEvent  event) {
 	    	CreationCheck ItemList= main.getCreationCheck();
 	    	AbstractShop shop=event.getShop();
-	    	String type="";
+	    	String type="none";
 	    	if(shop.getType()==ShopType.COMBO) {
 	    		ComboShop cs=(ComboShop) shop;
 	    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), cs.getPrice(), shop.getAmount(),ShopType.BUY);
 	    		if(type.equals("none"))
 		    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), cs.getPriceSell(), shop.getAmount(),ShopType.SELL);
-	    	}else
+	    	}else if(shop.getType()==ShopType.BUY || shop.getType()==ShopType.SELL)
 	    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), shop.getPrice(), shop.getAmount(),shop.getType());
 	    	if(!type.equals("none")) {
 	    		event.setCancelled(true);
