@@ -10,7 +10,9 @@ import com.snowgears.shop.shop.ComboShop;
 import com.snowgears.shop.shop.ShopType;
 
 import me.tWizT3d_dreaMr.ShopAddon.CreationCheck;
+import me.tWizT3d_dreaMr.ShopAddon.Filter;
 import me.tWizT3d_dreaMr.ShopAddon.Format;
+import me.tWizT3d_dreaMr.ShopAddon.MatchType;
 import me.tWizT3d_dreaMr.ShopAddon.main;
 
 
@@ -20,21 +22,32 @@ public class CheckOn implements Listener {
 	    public void onShopCreate(PlayerInitializeShopEvent  event) {
 	    	CreationCheck ItemList= main.getCreationCheck();
 	    	AbstractShop shop=event.getShop();
-	    	String type="none";
+	    	MatchType type=null;
 	    	if(shop.getType()==ShopType.COMBO) {
 	    		ComboShop cs=(ComboShop) shop;
-	    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), cs.getPrice(), shop.getAmount(),ShopType.BUY);
-	    		if(type.equals("none"))
-		    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), cs.getPriceSell(), shop.getAmount(),ShopType.SELL);
+	    		type=ItemList.test(event.getPlayer().getInventory().getItemInMainHand(), cs.getPrice(), shop.getAmount(),ShopType.BUY);
+	    		if(type==null)
+		    		type=ItemList.test(event.getPlayer().getInventory().getItemInMainHand(), cs.getPriceSell(), shop.getAmount(),ShopType.SELL);
 	    	}else if(shop.getType()==ShopType.BUY || shop.getType()==ShopType.SELL)
-	    		type=ItemList.testfor(event.getPlayer().getInventory().getItemInMainHand(), shop.getPrice(), shop.getAmount(),shop.getType());
-	    	if(!type.equals("none")) {
+	    		type=ItemList.test(event.getPlayer().getInventory().getItemInMainHand(), shop.getPrice(), shop.getAmount(),shop.getType());
+	    	if(!(type==null||type.getType().equals("WhiteList"))) {
 	    		event.setCancelled(true);
 	    		shop.delete();
 	    		Player player=event.getPlayer();
-	    		String message=Format.format(main.getCon().getString("Interaction."+type));
+	    		if(type.getType().equals("BlackList"))
+	    			player.sendMessage(Format.format(main.getCon().getString("Interaction.BlackList")));
+	    		String message=Format.format(main.getCon().getString("Interaction."+type.getType()));
+	    		Filter f=type.getFilter();
+	    		message=message.replace("%title%", f.Title());
+	    		if(type.getType().equals("pricemin")) {
+	    			message=message.replace("%amount%", f.getFriendlyMinAmount());
+	    			message=message.replace("%price%", f.getFriendlyMinPrice());
+	    		}
+	    		if(type.getType().equals("pricemax")) {
+	    			message=message.replace("%amount%", f.getFriendlyMaxAmount());
+	    			message=message.replace("%price%", f.getFriendlyMaxPrice());
+	    		}
 	    		
-	    		player.sendMessage(message);
 	    	}
 	 }
 

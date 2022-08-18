@@ -1,132 +1,73 @@
 package me.tWizT3d_dreaMr.ShopAddon;
 
-import java.util.Scanner;
+import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.snowgears.shop.shop.ShopType;
 
 
 public class CreationCheck {
-private YamlConfiguration listfile;
+private ConfigurationSection section;
+private ArrayList<Filter> filters;
 private boolean whitelist;
-
 public CreationCheck(YamlConfiguration from,boolean wh) {
 	if(from==null) return;
-	listfile=from;
+	section = from.getConfigurationSection("itemListing");
+	for(String title:section.getKeys(false)) {
+		ConfigurationSection testfor=section.getConfigurationSection(title);
+		String shopType=testfor.getString("shoptype");
+		String material=testfor.getString("material");
+		String lore=testfor.getString("lore-contains");
+		String name=testfor.getString("name-contains");
+		String listType=testfor.getString("ListType");
+		String priceMax=testfor.getString("pricemax");
+		String priceMin=testfor.getString("pricemin");
+		Filter f= new Filter(shopType, name, lore, listType, title, material, priceMin, priceMax);
+		filters.add(f);
+	}
+	
 	whitelist=wh;
 }
-
-public String testfor(ItemStack i, double price, int amount,ShopType st) {
-	if(i == null) return "none";
-	ConfigurationSection section = listfile.getConfigurationSection("itemListing");
-	for(String sec:section.getKeys(false)) {
-		ConfigurationSection testfor=listfile.getConfigurationSection("itemListing."+sec);
-			//material check
-			if(testfor.contains("shoptype")) {
-				if(!st.toString().toUpperCase().equals(testfor.getString("shoptype").toUpperCase())&&!testfor.getString("shoptype").toUpperCase().equals("ALL")) 
-					continue;
+public MatchType test(ItemStack i, double price, int amount, ShopType st) {
+	for(Filter f: filters) {
+		boolean match=false;
+		if(f.valid()) continue;
+		if(!f.MaterialSame(i.getType())) match=true;
+		String name="";
+		String lore="";
+		if(i.hasItemMeta()) {
+			ItemMeta im=i.getItemMeta();
+			if(im.hasDisplayName())
+				name=ChatColor.stripColor(im.getDisplayName());
+			if(im.hasLore())
+				lore=ChatColor.stripColor(im.getLore().toString());
+		}
+		if(!f.NameContains(name)) match=true;
+		if(!f.LoreContains(lore)) match=true;
+		
+		if(match)
+			return null;
+		if(f.ListType().equals("BlackList")) {
+			return new MatchType("BlackList", f);
+		}
+		if(f.ListType().equals("WhiteList")&&whitelist) {
+			return new MatchType("WhiteList", f);
+		}
+		if(f.ListType().equals("Price")) {
+			if(!f.maxCheck(amount/price)) {
+				return new MatchType("pricemax", f);
 			}
-			//material check
-			if(testfor.getString("material")==null) 
-				continue;
-
-			if(i.getType() != Material.getMaterial(testfor.getString("material").toUpperCase())) continue;
-			
-			//lorecheck
-			if(testfor.get("lore-contains")!=null) { 
-				if(i.hasItemMeta()) {
-					if(i.getItemMeta().hasLore()) {
-						if(!ChatColor.stripColor(i.getItemMeta().getLore().toString()).toLowerCase().contains(testfor.getString("lore-contains").toLowerCase())){
-							continue;
-						}
-					} else continue;
-				} else continue;
+			if(!f.minCheck(amount/price)) {
+				return new MatchType("pricemin", f);
 			}
-			//namecheck
-			if(testfor.get("name-contains")!=null) { 
-				if(i.hasItemMeta()) {
-					if(i.getItemMeta().hasDisplayName()) {
-						if(!ChatColor.stripColor(i.getItemMeta().getDisplayName()).toLowerCase().contains(testfor.getString("name-contains").toLowerCase())){
-							continue;
-						}
-					} else continue;
-				} else continue;
-			}
-			//ListType is important
-			if(testfor.getString("ListType") != null) {
-				String type=testfor.getString("ListType");
-				//whitelist
-				if(type.equalsIgnoreCase("WhiteList")) {return "none";}
-
-				//blacklist
-				else if(type.equalsIgnoreCase("BlackList")) {return "blacklist";}
-
-				//pricechecks
-				else if(type.equalsIgnoreCase("Price")) {
-					Double rat=price/amount;
-					if(testfor.get("pricemin")==null&&testfor.get("pricemax")==null) {
-						System.out.println("pricemin or pricemax for "+sec+". skipping section");
-						break;
-					}
-					if(testfor.get("pricemin")!=null) {
-						String min=testfor.getString("pricemin");
-						Scanner t=new Scanner(min);
-						int minamount=1;
-						double minprice=1;
-						if(t.hasNextDouble()) {
-							minprice=t.nextDouble();
-						}else {
-							System.out.println("pricemin broken for "+sec);
-							break;}
-						if(t.hasNextInt()) {
-							minamount=t.nextInt();
-						}else {
-							System.out.println("pricemin broken for "+sec);
-							break;}
-						t.close();
-						Double minrat=minprice/minamount;
-						if(rat<=minrat) {
-							return "pricemin";}
-				}
-				if(testfor.get("pricemax")!=null) {
-					String min=testfor.getString("pricemax");
-					Scanner t=new Scanner(min);
-					int maxamount=1;
-					double maxprice=1;
-					if(t.hasNextDouble()) {
-						maxprice=t.nextDouble();
-					}else {
-						System.out.println("pricemax broken for "+sec);
-						break;}
-					if(t.hasNextInt()) {
-						maxamount=t.nextInt();
-					}else {
-						System.out.println("pricemax broken for "+sec);
-						break;}
-					t.close();
-					Double maxrat=maxprice/maxamount;
-					if(rat>=maxrat) {
-						return "pricemax";}
-				}
-					
-				}
-				if(whitelist)return "whitelist";
-				else return "none";
-				}else {
-				System.out.println("Problem with ListType in "+sec+". Skipping section.");
-				break;
-			}
-			
+		}
 	}
-
-
-	if(whitelist)
-		return "whitelist";
-	return "none";
+	
+	return null;
 }
 }

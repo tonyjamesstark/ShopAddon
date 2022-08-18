@@ -1,9 +1,9 @@
 name: ShopAddon
 
 main: me.tWizT3d_dreaMr.ShopAddon.main
-version: 1.3.2
+version: 1.4.0
 author: tWizT3d_dreaMr
-api-version: 1.17
+api-version: 1.19
 depend: [ Shop ]
 softdepend: [ WorldGuard ]
 commands:
