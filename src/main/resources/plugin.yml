@@ -1,7 +1,7 @@
 name: ShopAddon
 
 main: me.tWizT3d_dreaMr.ShopAddon.main
-version: 1.4.0
+version: 1.4.1
 author: tWizT3d_dreaMr
 api-version: 1.19
 depend: [ Shop ]

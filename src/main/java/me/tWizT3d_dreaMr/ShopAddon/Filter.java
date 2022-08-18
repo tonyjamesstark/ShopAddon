@@ -14,10 +14,10 @@ public class Filter {
 	private boolean priceMin, priceMax, isInvalid;
 public Filter(String shoptype, String name, String lore, String listType,String title,
 		String mat, String minString, String maxString) {
-	this.shoptype=shoptype.toUpperCase();
-	this.name=name.toUpperCase();
-	this.lore=lore.toUpperCase();
-	this.listType=listType.toUpperCase();
+	this.shoptype=nullSafe(shoptype);
+	this.name=nullSafe(name);
+	this.lore=nullSafe(lore);
+	this.listType=nullSafe(listType);
 	this.title=title;
 	this.material=Material.getMaterial(mat);
 	priceMin= !minString.isBlank();
@@ -27,6 +27,9 @@ public Filter(String shoptype, String name, String lore, String listType,String 
 	isInvalid= this.material==null;
 	isInvalid= isInvalid ? true : (priceMin && priceMax);
 	if(isInvalid) Bukkit.getLogger().log(Level.INFO, this.title+" is Invalid");
+}
+private String nullSafe(String s) {
+	return s== null ? "" : s.toUpperCase();
 }
 private Double getRatio(String s, boolean max) {
 	String[] nums=s.split(" ");
