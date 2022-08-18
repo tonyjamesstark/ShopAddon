@@ -25,7 +25,7 @@ public Filter(String shoptype, String name, String lore, String listType,String 
 	priceMin= !minString.isBlank();
 	priceMax= !maxString.isBlank();
 	minRat=priceMin ? getRatio(minString ,false): 0.0;
-	minRat=priceMax ? getRatio(minString ,false): 0.0;
+	maxRat=priceMax ? getRatio(maxString ,true): 0.0;
 	isInvalid= this.material==null;
 	isInvalid= isInvalid ? true : (priceMin && priceMax);
 	if(isInvalid) Bukkit.getLogger().log(Level.INFO, this.title+" is Invalid");
@@ -36,6 +36,7 @@ private String nullSafe(String s) {
 private Double getRatio(String s, boolean max) {
 	String[] nums=s.split(" ");
 	boolean valid =nums.length!=2;
+
 	if(valid) valid=(Integer.valueOf(nums[0])==null || Integer.valueOf(nums[1])== null);
 	if(valid) {
 		if(max) 
@@ -55,7 +56,7 @@ private Double getRatio(String s, boolean max) {
 		friendlyMinA=""+amount;
 		friendlyMinP=""+price;
 		}
-	return amount/price;
+	return price/amount;
 }
 public boolean valid() {
 	return isInvalid;

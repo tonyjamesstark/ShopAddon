@@ -17,6 +17,7 @@ private ArrayList<Filter> filters;
 private boolean whitelist;
 public CreationCheck(YamlConfiguration from,boolean wh) {
 	if(from==null) return;
+	filters=new ArrayList<>();
 	section = from.getConfigurationSection("itemListing");
 	for(String title:section.getKeys(false)) {
 		ConfigurationSection testfor=section.getConfigurationSection(title);
@@ -49,20 +50,19 @@ public MatchType test(ItemStack i, double price, int amount, ShopType st) {
 		}
 		if(!f.NameContains(name)) match=true;
 		if(!f.LoreContains(lore)) match=true;
-		
 		if(match)
-			return null;
-		if(f.ListType().equals("BlackList")) {
+			continue;
+		if(f.ListType().equalsIgnoreCase("BlackList")) {
 			return new MatchType("BlackList", f);
 		}
-		if(f.ListType().equals("WhiteList")&&whitelist) {
+		if(f.ListType().equalsIgnoreCase("WhiteList")&&whitelist) {
 			return new MatchType("WhiteList", f);
 		}
-		if(f.ListType().equals("Price")) {
-			if(!f.maxCheck(amount/price)) {
+		if(f.ListType().equalsIgnoreCase("PRICE")) {
+			if(!f.maxCheck(price/amount)) {
 				return new MatchType("pricemax", f);
 			}
-			if(!f.minCheck(amount/price)) {
+			if(!f.minCheck(price/amount)) {
 				return new MatchType("pricemin", f);
 			}
 		}
