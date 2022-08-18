@@ -18,12 +18,14 @@ public Filter(String shoptype, String name, String lore, String listType,String 
 	this.name=nullSafe(name);
 	this.lore=nullSafe(lore);
 	this.listType=nullSafe(listType);
-	this.title=title;
+	this.title=title;		
 	this.material=Material.getMaterial(mat);
+	maxString =nullSafe(maxString);
+	minString =nullSafe(minString);
 	priceMin= !minString.isBlank();
 	priceMax= !maxString.isBlank();
-	minRat=priceMin? getRatio(minString ,false): 0.0;
-	minRat=priceMax? getRatio(minString ,false): 0.0;
+	minRat=priceMin ? getRatio(minString ,false): 0.0;
+	minRat=priceMax ? getRatio(minString ,false): 0.0;
 	isInvalid= this.material==null;
 	isInvalid= isInvalid ? true : (priceMin && priceMax);
 	if(isInvalid) Bukkit.getLogger().log(Level.INFO, this.title+" is Invalid");
