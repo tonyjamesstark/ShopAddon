@@ -3,6 +3,7 @@ package me.tWizT3d_dreaMr.ShopAddon;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +15,12 @@ import com.snowgears.shop.shop.ShopType;
 public class CreationCheck {
 private ConfigurationSection section;
 private ArrayList<Filter> filters;
+public ArrayList<Material> mats;
 private boolean whitelist;
 public CreationCheck(YamlConfiguration from,boolean wh) {
 	if(from==null) return;
 	filters=new ArrayList<>();
+	mats=new ArrayList<>();
 	section = from.getConfigurationSection("itemListing");
 	for(String title:section.getKeys(false)) {
 		ConfigurationSection testfor=section.getConfigurationSection(title);
@@ -30,6 +33,10 @@ public CreationCheck(YamlConfiguration from,boolean wh) {
 		String priceMin=testfor.getString("pricemin");
 		Filter f= new Filter(shopType, name, lore, listType, title, material, priceMin, priceMax);
 		filters.add(f);
+		Material mat=Material.getMaterial(material);
+		if(mat==null && mats.contains(mat)) {
+			mats.add(mat);
+		}
 	}
 	
 	whitelist=wh;

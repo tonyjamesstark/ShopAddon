@@ -16,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -25,6 +26,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.snowgears.shop.Shop;
+import com.snowgears.shop.shop.AbstractShop;
 
 import me.tWizT3d_dreaMr.ShopAddon.Gui.Guis;
 import me.tWizT3d_dreaMr.ShopAddon.Listeners.CheckOn;
@@ -144,7 +146,7 @@ public void onEnable()  {
     if(getConfig().getString("WhitelistItems").equalsIgnoreCase("true"))
     	wh=true;
     
-    creationCheck=new CreationCheck(con,wh);        
+    creationCheck=new CreationCheck(con,wh);     
 
 }
 private boolean areAble() {
@@ -198,6 +200,32 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			  NotificationCommand.Command((Player)sender, args);
 	
 		  return true;
+	  }
+	  if(command.getName().equalsIgnoreCase("filterall")) {
+
+		  if((sender instanceof Player)) {
+			  sender.sendMessage("You cant");
+			  return true;
+		  }
+		  sender.sendMessage("Running");
+		  Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+			    @Override
+			    public void run() {
+			    	CreationCheck cs=main.getCreationCheck();
+			       for(Material mat: cs.mats) {
+			    	   ItemStack is=new ItemStack(mat);
+			    	   List<AbstractShop> as=main.Shop.getShopHandler().getShopsByItem(is);
+			    	   for(AbstractShop a: as) {
+			    		   MatchType mt=cs.test(a.getItemStack(), a.getPrice(), a.getAmount(), a.getType());
+			    		   if(!(mt==null||mt.getType().equalsIgnoreCase("WhiteList"))) {
+			    			   a.delete();
+				       System.out.println("caught");
+			    		   }
+			    	   }
+			       }
+			       System.out.println("done");
+			    }
+			});
 	  }
 	  if(command.getName().equalsIgnoreCase("SASQLConversion")) {
 
