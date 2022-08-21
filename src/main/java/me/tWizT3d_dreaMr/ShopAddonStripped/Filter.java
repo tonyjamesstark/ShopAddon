@@ -1,11 +1,10 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddonStripped;
 
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
-import com.snowgears.shop.shop.ShopType;
 
 public class Filter {
 	private String shoptype, name, lore, listType, title, friendlyMinA, friendlyMaxA, friendlyMinP, friendlyMaxP;
@@ -73,8 +72,8 @@ public String getFriendlyMaxAmount() {
 public String getFriendlyMaxPrice() {
 	return friendlyMaxP;
 }
-public boolean valid(ShopType st) {
-	return shoptype.equals("ALL") || ShopType.valueOf(shoptype)==st;
+public boolean valid(String st) {
+	return shoptype.equals("ALL")|| shoptype.equalsIgnoreCase(st);
 }
 public boolean MaterialSame(Material mat) {
 	return mat==material;

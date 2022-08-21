@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddonStripped;
 
 public class MatchType {
 private String type;

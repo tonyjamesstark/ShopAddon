@@ -1,4 +1,4 @@
-package me.tWizT3d_dreaMr.ShopAddon;
+package me.tWizT3d_dreaMr.ShopAddonStripped;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.snowgears.shop.shop.ShopType;
 
 
 public class CreationCheck {
@@ -17,7 +16,7 @@ private ConfigurationSection section;
 private ArrayList<Filter> filters;
 public ArrayList<Material> mats;
 private boolean whitelist;
-public CreationCheck(YamlConfiguration from,boolean wh) {
+public CreationCheck(YamlConfiguration from) {
 	if(from==null) return;
 	filters=new ArrayList<>();
 	mats=new ArrayList<>();
@@ -39,15 +38,15 @@ public CreationCheck(YamlConfiguration from,boolean wh) {
 		}
 	}
 	
-	whitelist=wh;
 }
-public MatchType test(ItemStack i, double price, int amount, ShopType st) {
+public MatchType test(ItemStack i, double price, int amount, String st) {
 	for(Filter f: filters) {
 		boolean match=false;
 		if(f.valid()) continue;
 		if(!f.MaterialSame(i.getType())) match=true;
 		String name="";
 		String lore="";
+		System.out.println(f.Title());
 		if(i.hasItemMeta()) {
 			ItemMeta im=i.getItemMeta();
 			if(im.hasDisplayName())

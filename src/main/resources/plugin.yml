@@ -1,21 +1,10 @@
-name: ShopAddon
+name: ShopAddonStripped
 
-main: me.tWizT3d_dreaMr.ShopAddon.main
-version: 1.4.2
+main: me.tWizT3d_dreaMr.ShopAddonStripped.main
+version: 1.0.0
 author: tWizT3d_dreaMr
 api-version: 1.19
-depend: [ Shop ]
-softdepend: [ WorldGuard ]
 commands:
-   sa:
-      description: checks shop signs log
-      usage: sa check <page>
    filterall:
       description: filterall shops
       usage: filterall
-   ShopNotifications:
-      description: Changes your shop notification settings
-      usage: ShopNotifications
-   SASQLConversion:
-      description: Converts my logging to official logging
-      usage: SASQLConversion
