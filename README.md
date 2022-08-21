@@ -1,8 +1,7 @@
-# ShopAddon
+# ShopAddonStripped
 
-Adds item Blacklisting and item Whitelisting, as well as price fixing.
-And adds shop logging lookups
+Adds the filterall command
+Please already have set up filters with the ShopAddon
+Disable shop then run filterall
 
-
-
-Brandon from https://www.fiverr.com/brandont80/create-a-small-minecraft-plugin-for-you fixed the sql
+current download https://github.com/tWizT3ddreaMr/ShopAddon/releases/tag/v1.4.2
