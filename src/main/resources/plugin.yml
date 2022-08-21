@@ -10,9 +10,6 @@ commands:
    sa:
       description: checks shop signs log
       usage: sa check <page>
-   filterall:
-      description: filterall shops
-      usage: filterall
    ShopNotifications:
       description: Changes your shop notification settings
       usage: ShopNotifications
