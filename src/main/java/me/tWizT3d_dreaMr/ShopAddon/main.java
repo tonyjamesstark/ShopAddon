@@ -27,6 +27,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.snowgears.shop.Shop;
 import com.snowgears.shop.shop.AbstractShop;
+import com.snowgears.shop.shop.ShopType;
 
 import me.tWizT3d_dreaMr.ShopAddon.Gui.Guis;
 import me.tWizT3d_dreaMr.ShopAddon.Listeners.CheckOn;
@@ -211,18 +212,30 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			    @Override
 			    public void run() {
-			    	CreationCheck cs=main.getCreationCheck();
-			       for(Material mat: cs.mats) {
-			    	   ItemStack is=new ItemStack(mat);
-			    	   List<AbstractShop> as=main.Shop.getShopHandler().getShopsByItem(is);
-			    	   for(AbstractShop a: as) {
-			    		   MatchType mt=cs.test(a.getItemStack(), a.getPrice(), a.getAmount(), a.getType());
-			    		   if(!(mt==null||mt.getType().equalsIgnoreCase("WhiteList"))) {
-			    			   a.delete();
-				       System.out.println("caught");
-			    		   }
-			    	   }
-			       }
+			        File fileDirectory = new File( "/plugins/Shop/Data");
+			        if (!fileDirectory.exists())
+			            return;
+
+			        ConfigurationSection ShopConfig;
+			        for (File file : fileDirectory.listFiles()) {
+			            if (file.isFile()) {
+			                if (file.getName().endsWith(".yml")){
+			                	String uuid=file.getName().replace(".yml","");
+			                	ShopConfig=YamlConfiguration.loadConfiguration(file)
+			                			.getConfigurationSection("Shops."+uuid);
+			                	for(String s: ShopConfig.getKeys(false)) {
+			                		ShopType st=ShopType.valueOf(ShopConfig.getString(s+".type").toUpperCase());
+			                		Double price=ShopConfig.getDouble(s+".price");
+			                		int amount=ShopConfig.getInt(s+".amount");
+			                		ItemStack is=ShopConfig.getItemStack(s+".item");
+			                		MatchType type=main.getCreationCheck().test(is, price, amount, st);
+			            	    	if(!(type==null||type.getType().equalsIgnoreCase("WhiteList"))) {
+			            	    		ShopConfig.
+			            	    	}
+			                	}
+			                }
+			            }
+			        }
 			       System.out.println("done");
 			    }
 			});
