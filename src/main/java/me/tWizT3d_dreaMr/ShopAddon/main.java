@@ -26,7 +26,6 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.snowgears.shop.Shop;
-import com.snowgears.shop.shop.AbstractShop;
 import com.snowgears.shop.shop.ShopType;
 
 import me.tWizT3d_dreaMr.ShopAddon.Gui.Guis;
@@ -217,12 +216,15 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			            return;
 
 			        ConfigurationSection ShopConfig;
+			        YamlConfiguration ShopConfig2;
 			        for (File file : fileDirectory.listFiles()) {
 			            if (file.isFile()) {
 			                if (file.getName().endsWith(".yml")){
 			                	String uuid=file.getName().replace(".yml","");
+			 			        System.out.println("File "+uuid+ ".yml");
 			                	ShopConfig=YamlConfiguration.loadConfiguration(file)
 			                			.getConfigurationSection("Shops."+uuid);
+			                	ShopConfig2=YamlConfiguration.loadConfiguration(file);
 			                	for(String s: ShopConfig.getKeys(false)) {
 			                		ShopType st=ShopType.valueOf(ShopConfig.getString(s+".type").toUpperCase());
 			                		Double price=ShopConfig.getDouble(s+".price");
@@ -230,13 +232,20 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			                		ItemStack is=ShopConfig.getItemStack(s+".item");
 			                		MatchType type=main.getCreationCheck().test(is, price, amount, st);
 			            	    	if(!(type==null||type.getType().equalsIgnoreCase("WhiteList"))) {
-			            	    		ShopConfig.
+			            	    		ShopConfig2.set(s, null);
 			            	    	}
 			                	}
+				                try {
+									ShopConfig2.save(file);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 			                }
 			            }
 			        }
-			       System.out.println("done");
+			        
+			        System.out.println("done");
 			    }
 			});
 	  }
