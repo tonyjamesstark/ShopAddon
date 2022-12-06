@@ -16,3 +16,6 @@ commands:
    SASQLConversion:
       description: Converts my logging to official logging
       usage: SASQLConversion
+   SearchShops:
+      description: Search Shops
+      usage: SearchShop <Item>

@@ -163,6 +163,14 @@ private boolean areAble() {
 	return true;
 }
 public List<String> onTabComplete(CommandSender sender , Command cmd, String CommandLabel, String[] args){
+	if(cmd.getName().equalsIgnoreCase("searchshops")) {
+
+		ArrayList<String> ret= new ArrayList<String>();
+		for(Material m:Material.values())
+			if(m.name().startsWith(args[0]))
+				ret.add(m.name());
+		return ret;
+	}
 	if(cmd.getName().equalsIgnoreCase("SA")) {
 		ArrayList<String> ret= new ArrayList<String>();
 		if(args.length==1) {
@@ -216,6 +224,19 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 
 	  return true;
   }
+	  
+	  if (command.getName().equalsIgnoreCase("searchshops")){
+		  if(!(sender instanceof Player)) {
+			  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));
+			  return true;
+		  }
+		  if(args.length==0) {
+			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
+			  return true;
+		  }
+		  CommandSearch.Search((Player)sender, args[0]);
+	  }
+	  
 	  if (command.getName().equalsIgnoreCase("SA"))
 	  { 	if(!(sender instanceof Player)) {
 		  sender.sendMessage(Format.format( config.getString("Command.OnlyPlayers")));
