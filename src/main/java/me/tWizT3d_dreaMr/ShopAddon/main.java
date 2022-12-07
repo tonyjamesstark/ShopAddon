@@ -167,7 +167,7 @@ public List<String> onTabComplete(CommandSender sender , Command cmd, String Com
 
 		ArrayList<String> ret= new ArrayList<String>();
 		for(Material m:Material.values())
-			if(m.name().startsWith(args[0]))
+			if(m.name().startsWith(args[0].toUpperCase()))
 				ret.add(m.name());
 		return ret;
 	}
@@ -235,6 +235,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			  return true;
 		  }
 		  CommandSearch.Search((Player)sender, args[0]);
+		  return true;
 	  }
 	  
 	  if (command.getName().equalsIgnoreCase("SA"))
