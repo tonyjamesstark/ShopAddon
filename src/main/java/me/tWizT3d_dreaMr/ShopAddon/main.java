@@ -31,6 +31,7 @@ import me.tWizT3d_dreaMr.ShopAddon.Listeners.ShopLogging;
 import me.tWizT3d_dreaMr.ShopAddon.Listeners.guiListener;
 import me.tWizT3d_dreaMr.ShopAddon.Logging.ConversionClass;
 import me.tWizT3d_dreaMr.ShopAddon.Logging.LoggingPlayer;
+import net.md_5.bungee.api.ChatColor;
 
 
 public class main extends JavaPlugin {
@@ -234,7 +235,10 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
 			  return true;
 		  }
-		  CommandSearch.Search((Player)sender, args[0]);
+		  String arg=args[0].toUpperCase();
+		  sender.sendMessage(ChatColor.AQUA+"Searching for "+ChatColor.WHITE+arg+ChatColor.AQUA+".");
+		  CommandSearch.Search((Player)sender, arg.replace("S", "").equals("KEY")
+				  ? "TRIPWIRE_HOOK" : arg);
 		  return true;
 	  }
 	  
