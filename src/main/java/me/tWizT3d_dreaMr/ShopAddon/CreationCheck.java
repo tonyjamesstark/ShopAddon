@@ -36,9 +36,8 @@ public CreationCheck(YamlConfiguration from,boolean wh) {
 }
 public MatchType test(ItemStack i, double price, int amount, ShopType st) {
 	for(Filter f: filters) {
-		boolean match=false;
 		if(f.valid()) continue;
-		if(!f.MaterialSame(i.getType())) match=true;
+		if(!f.MaterialSame(i.getType())) continue;
 		String name="";
 		String lore="";
 		if(i.hasItemMeta()) {
@@ -48,10 +47,11 @@ public MatchType test(ItemStack i, double price, int amount, ShopType st) {
 			if(im.hasLore())
 				lore=ChatColor.stripColor(im.getLore().toString());
 		}
-		if(!f.NameContains(name)) match=true;
-		if(!f.LoreContains(lore)) match=true;
-		if(match)
-			continue;
+		
+		if(!f.NameContains(name)) continue;
+		if(!f.LoreContains(lore)) continue;
+		if(!f.ShoptType(st)) continue;
+		
 		if(f.ListType().equalsIgnoreCase("BlackList")) {
 			return new MatchType("BlackList", f);
 		}

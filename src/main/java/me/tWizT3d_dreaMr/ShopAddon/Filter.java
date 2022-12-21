@@ -73,7 +73,7 @@ public String getFriendlyMaxAmount() {
 public String getFriendlyMaxPrice() {
 	return friendlyMaxP;
 }
-public boolean valid(ShopType st) {
+public boolean ShoptType(ShopType st) {
 	return shoptype.equals("ALL") || ShopType.valueOf(shoptype)==st;
 }
 public boolean MaterialSame(Material mat) {
