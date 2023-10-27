@@ -165,7 +165,6 @@ private boolean areAble() {
 }
 public List<String> onTabComplete(CommandSender sender , Command cmd, String CommandLabel, String[] args){
 	if(cmd.getName().equalsIgnoreCase("searchshops")) {
-
 		ArrayList<String> ret= new ArrayList<String>();
 		for(Material m:Material.values())
 			if(m.name().startsWith(args[0].toUpperCase()))
@@ -234,6 +233,9 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  if(args.length==0) {
 			  sender.sendMessage(Format.format( config.getString("Command.IncorectUsage")));
 			  return true;
+		  } 
+		  if(!sender.hasPermission("shopaddon.canSearch")) {
+			  sender.sendMessage(Format.format( config.getString("Command.NoPerms")));
 		  }
 		  String arg=args[0].toUpperCase();
 		  sender.sendMessage(ChatColor.AQUA+"Searching for "+ChatColor.WHITE+arg+ChatColor.AQUA+".");
