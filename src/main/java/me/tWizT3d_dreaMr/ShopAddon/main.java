@@ -236,6 +236,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 		  } 
 		  if(!sender.hasPermission("shopaddon.canSearch")) {
 			  sender.sendMessage(Format.format( config.getString("Command.NoPerms")));
+			  return true;
 		  }
 		  String arg=args[0].toUpperCase();
 		  sender.sendMessage(ChatColor.AQUA+"Searching for "+ChatColor.WHITE+arg+ChatColor.AQUA+".");
