@@ -1,21 +1,22 @@
-name: ShopAddon
-
+name: ${project.artifactId}
 main: me.tWizT3d_dreaMr.ShopAddon.main
-version: 1.4.3
-author: tWizT3d_dreaMr
-api-version: 1.19
-depend: [ Shop ]
-softdepend: [ WorldGuard ]
+version: ${project.version}
+authors: [tWizT3d_dreaMr, TonyJamesStark]
+depend: [Shop]
+softdepend: [Essentials]
 commands:
-   sa:
-      description: checks shop signs log
-      usage: sa check <page>
+   # the following functionality is now supported by the native Shop plugin
+   # sa:
+   #    description: checks shop signs log
+   #    usage: sa check <page>
+   # SASQLConversion:
+   #    description: Converts my logging to official logging
+   #    usage: SASQLConversion
    ShopNotifications:
       description: Changes your shop notification settings
       usage: ShopNotifications
-   SASQLConversion:
-      description: Converts my logging to official logging
-      usage: SASQLConversion
    SearchShops:
       description: Search Shops
-      usage: SearchShop <Item>
+      usage: SearchShops <Item> or SearchShops player <playername/nickname> or SearchShops loredName <CustomItemName>
+api: ${apiVersion}
+api-version: ${apiVersion}
