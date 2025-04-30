@@ -1,0 +1,9 @@
+itemListing:
+  exampleitem:
+    ListType: price
+    material: chest
+    lore-contains: Example lore
+    name-contains: Example name
+    pricemin: 1 64
+    pricemax: 2 64
+    ShopType: all

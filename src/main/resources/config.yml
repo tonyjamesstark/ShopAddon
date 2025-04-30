@@ -1,0 +1,23 @@
+debug: false
+WhitelistItems: false
+Interaction:
+  pricemin: '&#952f39Your item is too cheap'
+  pricemax: '&#952f39Your item is too expensive'
+  blacklist: '&#952f39That item can not be sold'
+  whitelist: '&#952f39That item can not be sold'
+Command:
+  OnlyPlayers: '&cOnly players can use this command!'
+  IncorrectUsage: '&cIncorrect usage!'
+  NoPerms: '&cYou dont have permission!'
+  NotAArgumentr: '&cThat isn''t a valid Argument!'
+  NotAArgument: '&cThat isn''t a valid Argument!'
+Gui:
+  Settings: true
+  Active: true
+  Material:
+    Confirm: LIME_STAINED_GLASS_PANE
+    TransAmount: GREEN_STAINED_GLASS_PANE
+    TransOut: RED_STAINED_GLASS_PANE
+    Default: BLACK_STAINED_GLASS_PANE
+    NotStock: WHITE_STAINED_GLASS_PANE
+    NotMoney: WHITE_STAINED_GLASS_PANE
