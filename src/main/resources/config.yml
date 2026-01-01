@@ -21,3 +21,8 @@ Gui:
     Default: BLACK_STAINED_GLASS_PANE
     NotStock: WHITE_STAINED_GLASS_PANE
     NotMoney: WHITE_STAINED_GLASS_PANE
+OfflineSales:
+  # Enable or disable offline sales caching feature
+  Enabled: true
+  # Permission node required for /offlinesales command (defined in plugin.yml)
+  Permission: shopaddon.offlinesales

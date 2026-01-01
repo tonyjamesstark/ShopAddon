@@ -18,5 +18,10 @@ commands:
    SearchShops:
       description: Search Shops
       usage: SearchShops <Item> or SearchShops player <playername/nickname> or SearchShops loredName <CustomItemName>
+   offlinesales:
+      description: View your last offline shop sales
+      usage: /offlinesales
+      permission: shopaddon.offlinesales
+      permission-message: You don't have permission to use this command.
 api: ${apiVersion}
 api-version: ${apiVersion}

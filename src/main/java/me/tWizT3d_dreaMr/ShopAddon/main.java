@@ -28,6 +28,8 @@ import me.tWizT3d_dreaMr.ShopAddon.Listeners.guiListener;
 import me.tWizT3d_dreaMr.ShopAddon.limits.CreationCheck;
 import me.tWizT3d_dreaMr.ShopAddon.notify.NotificationCommand;
 import me.tWizT3d_dreaMr.ShopAddon.notify.NotificationCommand.NotificationSubcommand;
+import me.tWizT3d_dreaMr.ShopAddon.offlinesales.OfflineSalesCommand;
+import me.tWizT3d_dreaMr.ShopAddon.offlinesales.OfflineSalesListener;
 import me.tWizT3d_dreaMr.ShopAddon.search.CommandSearch;
 import me.tWizT3d_dreaMr.ShopAddon.search.MyShopGUIListener;
 import me.tWizT3d_dreaMr.ShopAddon.util.Format;
@@ -88,6 +90,11 @@ public class main extends JavaPlugin {
 		creationCheck = new CreationCheck(con, isWhitelist);
 
 		Bukkit.getPluginManager().registerEvents(new MyShopGUIListener(shop), this);
+
+		// Register offline sales listener if enabled
+		if (config.getBoolean("OfflineSales.Enabled", true)) {
+			Bukkit.getPluginManager().registerEvents(new OfflineSalesListener(), this);
+		}
 
 	}
 
@@ -152,7 +159,7 @@ public class main extends JavaPlugin {
 					ret.add("<Lored Name>");
 					return ret;
 				default:
-					ret.add(" player");
+					ret.add(" player"); //leading spaces so they show up first, does not affect execution
 					ret.add(" loredName");
 					for (Material m : Material.values()) {
 						ret.add(m.name());
@@ -199,6 +206,11 @@ public class main extends JavaPlugin {
 
 			return true;
 		}
+
+		if (command.getName().equalsIgnoreCase("offlinesales")) {
+			return new OfflineSalesCommand().onCommand(sender, command, label, args);
+		}
+
 		return false;
 	}
 
