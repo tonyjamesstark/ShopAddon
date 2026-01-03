@@ -15,7 +15,8 @@ public class MyListSearchResultsWindow extends MyListShopsWindow {
 	public static enum ShopSearchType {
 		PLAYER,
 		ITEM,
-		ITEM_NAME
+		ITEM_NAME,
+		NONE
 	}
 
 	protected Material itemSearched = Material.STONE;
@@ -45,6 +46,12 @@ public class MyListSearchResultsWindow extends MyListShopsWindow {
 		initInvContents();
 	}
 
+	public MyListSearchResultsWindow(UUID player) {
+		super(player);
+		searchType = ShopSearchType.NONE;
+		initInvContents();
+	}
+
 	@Override
 	protected List<Predicate<AbstractShop>> collectFilters() {
 		List<Predicate<AbstractShop>> filters = super.collectFilters();
@@ -57,11 +64,14 @@ public class MyListSearchResultsWindow extends MyListShopsWindow {
 				filters.add(new DisplayNameFilter(displayNameSearched));
 				break;
 			case ITEM:
-			default:
 				filters.add(shop -> (((shop.getItemStack() != null) &&
 						(shop.getItemStack().getType().equals(itemSearched))) ||
 						((shop.getSecondaryItemStack() != null) &&
 								(shop.getSecondaryItemStack().getType().equals(itemSearched)))));
+				break;
+			case NONE:
+			default:
+				break;
 		}
 		return filters;
 	}

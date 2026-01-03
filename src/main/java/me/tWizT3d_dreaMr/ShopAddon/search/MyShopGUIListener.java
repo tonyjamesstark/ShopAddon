@@ -99,6 +99,8 @@ public class MyShopGUIListener extends ShopGUIListener {
         }
 
         itemToIcon.put(gh.getIcon(GuiIcon.HOME_SETTINGS, null, null), GuiIcon.HOME_SETTINGS);
+        itemToIcon.put(gh.getIcon(GuiIcon.HOME_LIST_ALL_SHOPS, null, null), GuiIcon.HOME_LIST_ALL_SHOPS);
+
     }
 
     @EventHandler
@@ -146,6 +148,12 @@ public class MyShopGUIListener extends ShopGUIListener {
         // settings button
         if (icon.equals(GuiIcon.HOME_SETTINGS)) {
             gh.setWindow(player, new PlayerSettingsWindow((((OfflinePlayer) player).getUniqueId())));
+            return;
+        }
+
+        // list all shops button
+        if (icon.equals(GuiIcon.HOME_LIST_ALL_SHOPS)) {
+            gh.setWindow(player, new MyListSearchResultsWindow((((OfflinePlayer) player).getUniqueId())));
             return;
         }
 

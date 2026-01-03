@@ -79,6 +79,12 @@ public class MyListShopsWindow extends ShopGuiWindow {
         ItemStack filterStockIcon = Shop.getPlugin().getGuiHandler().getIcon(guiIcon, player, null);
         page.setItem(6, filterStockIcon);
 
+        // list all shops
+        // guiIcon =
+        //         Shop.getPlugin().getGuiHandler().getIcon(ShopGuiHandler.GuiIcon.HOME_LIST_ALL_SHOPS, null, null);
+        ItemStack listAllIcon = Shop.getPlugin().getGuiHandler().getIcon(ShopGuiHandler.GuiIcon.HOME_LIST_ALL_SHOPS, null, null);
+        page.setItem(1, listAllIcon);
+
         // search icon
         if (Shop.getPlugin().allowCreativeSelection()) {
             ItemStack searchIcon =
