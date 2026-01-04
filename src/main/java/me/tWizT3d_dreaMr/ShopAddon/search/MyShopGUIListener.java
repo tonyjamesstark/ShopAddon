@@ -103,12 +103,20 @@ public class MyShopGUIListener extends ShopGUIListener {
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     @Override
     public void onInvClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
+
+        // Early exit for non-shop inventories to avoid creating stale windows
+        // Regular chests have holders; shop GUI windows created with
+        // Bukkit.createInventory(null, ...) don't
+        if (event.getInventory().getHolder() != null) {
+            return;
+        }
+
         Player player = (Player) event.getWhoClicked();
 
         ShopGuiWindow _window = plugin.getGuiHandler().getWindow(player);
