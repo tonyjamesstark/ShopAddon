@@ -6,7 +6,7 @@
 
     <groupId>me.tWizT3d_dreaMr</groupId>
     <artifactId>ShopAddon</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -66,7 +66,7 @@
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
-        <defaultGoal>clean package</defaultGoal>
+        <defaultGoal>spotless:check package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,6 +75,19 @@
                 <configuration>
                     <source>16</source>
                     <target>16</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.17.0</version>
+                            <style>AOSP</style>
+                        </googleJavaFormat>
+                    </java>
                 </configuration>
             </plugin>
         </plugins>

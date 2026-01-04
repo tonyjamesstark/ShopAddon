@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * In-memory cache for storing the last offline shop sales message per player.
- * Thread-safe singleton implementation.
+ * In-memory cache for storing the last offline shop sales message per player. Thread-safe singleton
+ * implementation.
  */
 public class OfflineSalesCache {
 
@@ -18,6 +18,7 @@ public class OfflineSalesCache {
 
     /**
      * Get the singleton instance of the cache.
+     *
      * @return The OfflineSalesCache instance
      */
     public static synchronized OfflineSalesCache getInstance() {
@@ -29,6 +30,7 @@ public class OfflineSalesCache {
 
     /**
      * Set or replace the cached message for a player.
+     *
      * @param playerUUID The player's UUID
      * @param message The formatted offline sales message
      */
@@ -38,6 +40,7 @@ public class OfflineSalesCache {
 
     /**
      * Get the cached message for a player.
+     *
      * @param playerUUID The player's UUID
      * @return The cached message, or null if none exists
      */
@@ -47,6 +50,7 @@ public class OfflineSalesCache {
 
     /**
      * Clear the cached message for a player.
+     *
      * @param playerUUID The player's UUID
      */
     public synchronized void clearMessage(UUID playerUUID) {
@@ -55,6 +59,7 @@ public class OfflineSalesCache {
 
     /**
      * Check if a player has a cached message.
+     *
      * @param playerUUID The player's UUID
      * @return True if a message exists, false otherwise
      */

@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * Command handler for /offlinesales command.
- * Displays the cached offline shop sales message for the player.
+ * Command handler for /offlinesales command. Displays the cached offline shop sales message for the
+ * player.
  */
 public class OfflineSalesCommand implements CommandExecutor {
 
@@ -47,7 +47,8 @@ public class OfflineSalesCommand implements CommandExecutor {
         }
 
         player.sendMessage("");
-        player.sendMessage(Format.format("&7Use this command anytime to see your last offline sales."));
+        player.sendMessage(
+                Format.format("&7Use this command anytime to see your last offline sales."));
 
         return true;
     }
