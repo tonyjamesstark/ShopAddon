@@ -153,6 +153,11 @@ public class MyShopGUIListener extends ShopGUIListener {
         ShopGuiHandler gh = plugin.getGuiHandler();
         GuiIcon icon = itemToIcon.get(clicked);
 
+        if (icon == null){
+            return;
+            //not a recognized icon, likely a non-shopgui inventory
+        }
+
         // settings button
         if (icon.equals(GuiIcon.HOME_SETTINGS)) {
             gh.setWindow(player, new PlayerSettingsWindow((((OfflinePlayer) player).getUniqueId())));
@@ -178,7 +183,7 @@ public class MyShopGUIListener extends ShopGUIListener {
             case GUI_SORT:
                 icon = sortIconsList.next(icon);
             default:
-                break;
+                break; 
         }
         gh.setIconForOption(player, opt, icon);
         window.initInvContents();
