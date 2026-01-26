@@ -103,17 +103,20 @@ public class MyShopGUIListener extends ShopGUIListener {
 
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = false)
     @Override
     public void onInvClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }
+        // plugin.getLogger().severe("click");
+
 
         // Early exit for non-shop inventories to avoid creating stale windows
         // Regular chests have holders; shop GUI windows created with
         // Bukkit.createInventory(null, ...) don't
         if (event.getInventory().getHolder() != null) {
+            // plugin.getLogger().severe("Non null holder: " + event.getInventory().getHolder().toString());
             return;
         }
 
@@ -122,22 +125,27 @@ public class MyShopGUIListener extends ShopGUIListener {
         ShopGuiWindow _window = plugin.getGuiHandler().getWindow(player);
 
         if (!getInventoryViewTitle(event).equals(_window.getTitle())) {
+            // plugin.getLogger().severe("not correct title");
             return;
         }
 
         if (event.getClick() == ClickType.NUMBER_KEY) {
             event.setCancelled(true);
+            // plugin.getLogger().severe("number key");
             return;
         }
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || clicked.getType() == Material.AIR) {
+            // plugin.getLogger().severe("clicked air");
+            return;
+        }
+
+        if (!(_window instanceof MyListSearchResultsWindow)) {
+            // plugin.getLogger().severe("wrong window");
             return;
         }
         event.setCancelled(true);
 
-        if (!(_window instanceof MyListSearchResultsWindow)) {
-            return;
-        }
         MyListSearchResultsWindow window = (MyListSearchResultsWindow) _window;
 
         // check if the clicked item is a shop icon
@@ -145,6 +153,7 @@ public class MyShopGUIListener extends ShopGUIListener {
                 .get(plugin.getSignLocationNameSpacedKey(), PersistentDataType.STRING);
         if (signLocation != null) {
             handleShopIconClick(signLocation, player);
+            // plugin.getLogger().severe("sign click");
             return;
         }
 
@@ -154,6 +163,7 @@ public class MyShopGUIListener extends ShopGUIListener {
         GuiIcon icon = itemToIcon.get(clicked);
 
         if (icon == null){
+            // plugin.getLogger().severe("Null icon");
             return;
             //not a recognized icon, likely a non-shopgui inventory
         }
@@ -183,7 +193,7 @@ public class MyShopGUIListener extends ShopGUIListener {
             case GUI_SORT:
                 icon = sortIconsList.next(icon);
             default:
-                break; 
+                break; //fall through
         }
         gh.setIconForOption(player, opt, icon);
         window.initInvContents();
