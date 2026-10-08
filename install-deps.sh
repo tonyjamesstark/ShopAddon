@@ -1,9 +1,8 @@
-# Build Shop jar from source
+# Build Shop from source
 # then configure and run this to install to local maven repo
 
-JAR_PATH=../../../shop/Shop/target/Shop-1.10.0.jar
-POM_PATH=../../../shop/Shop/pom.xml
-VERSION=1.10.0
+JAR_PATH=../Shop/target/Shop-1.11.3.jar
+VERSION=1.11.3
 GROUP_ID=com.snowgears.shop
 ARTIFACT_ID=Shop
 REPO_PATH=lib
@@ -15,4 +14,4 @@ mvn install:install-file \
 	-Dversion=$VERSION \
 	-Dpackaging=jar \
 	-DlocalRepositoryPath=$REPO_PATH \
-	-DpomFile=$POM_PATH
+	-DgeneratePom=true

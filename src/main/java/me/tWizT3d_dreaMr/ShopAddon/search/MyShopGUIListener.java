@@ -216,6 +216,12 @@ public class MyShopGUIListener extends ShopGUIListener {
             ShopMessage.sendMessage("interactionIssue", "regionRestriction", player, shop);
             return;
         }
+        Location destination = shop.getTeleportLocation();
+        if (destination == null) {
+            player.sendMessage(ChatColor.RED + "There is no safe place to stand near this shop.");
+            plugin.getGuiHandler().closeWindow(player);
+            return;
+        }
         double cost = plugin.getTeleportCost();
         if (cost > 0) {
             PlayerInventory inv = player.getInventory();
@@ -243,7 +249,7 @@ public class MyShopGUIListener extends ShopGUIListener {
                     player.sendMessage(ChatColor.BLUE + "Teleporting...");
 
             });
-            u.getAsyncTeleport().teleport(loc, charge, cause, future);
+            u.getAsyncTeleport().teleport(destination, charge, cause, future);
 
         } else {
             player.sendMessage(ChatColor.BLUE + "Teleporting...");

@@ -43,7 +43,7 @@
             <groupId>com.snowgears.shop</groupId>
             <artifactId>Shop</artifactId>
             <scope>provided</scope>
-            <version>1.10.0</version>
+            <version>1.11.3</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
