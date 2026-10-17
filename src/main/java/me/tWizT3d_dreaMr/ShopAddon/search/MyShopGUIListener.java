@@ -217,7 +217,7 @@ public class MyShopGUIListener extends ShopGUIListener {
             ShopMessage.sendMessage("interactionIssue", "regionRestriction", player, shop);
             return;
         }
-        Location destination = shop.getTeleportLocation();
+        Location destination = teleportDestination(shop, loc);
         if (destination == null) {
             player.sendMessage(ChatColor.RED + "There is no safe place to stand near this shop.");
             plugin.getGuiHandler().closeWindow(player);
@@ -260,6 +260,16 @@ public class MyShopGUIListener extends ShopGUIListener {
         }
         plugin.getGuiHandler().closeWindow(player);
         return;
+    }
+
+    // getTeleportLocation() exists only in Shop builds with the safe-teleport fix; on others, fall
+    // back to the sign block and Essentials' own teleport safety.
+    private static Location teleportDestination(AbstractShop shop, Location sign) {
+        try {
+            return shop.getTeleportLocation();
+        } catch (NoSuchMethodError e) {
+            return sign;
+        }
     }
 
     public CompletableFuture<Boolean> getNewExceptionFuture(
