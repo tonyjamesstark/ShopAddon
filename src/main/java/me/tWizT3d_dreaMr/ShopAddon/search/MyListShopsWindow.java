@@ -171,9 +171,9 @@ public class MyListShopsWindow extends ShopGuiWindow {
                 new ArrayList<Predicate<AbstractShop>>(); // refactored filtering
 
         switch (guiFilterTypeIcon) {
-                // case MENUBAR_FILTER_TYPE_ALL: // no filter for default option
-                //     filteredShops = allShops;
-                //     break;
+            // case MENUBAR_FILTER_TYPE_ALL: // no filter for default option
+            //     filteredShops = allShops;
+            //     break;
             case MENUBAR_FILTER_TYPE_SELL:
                 filters.add(
                         shop ->

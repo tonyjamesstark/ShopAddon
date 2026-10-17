@@ -6,12 +6,12 @@
 
     <groupId>me.tWizT3d_dreaMr</groupId>
     <artifactId>ShopAddon</artifactId>
-    <version>1.5.6</version>
+    <version>2.0.0</version>
 
     <properties>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <apiVersion>1.21.4</apiVersion>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <apiVersion>26.2</apiVersion>
     </properties>
 
     <repositories>
@@ -34,9 +34,9 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${apiVersion}-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>26.2.build.129-stable</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -73,8 +73,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>25</source>
+                    <target>25</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -84,7 +84,7 @@
                 <configuration>
                     <java>
                         <googleJavaFormat>
-                            <version>1.17.0</version>
+                            <version>1.30.0</version>
                             <style>AOSP</style>
                         </googleJavaFormat>
                     </java>

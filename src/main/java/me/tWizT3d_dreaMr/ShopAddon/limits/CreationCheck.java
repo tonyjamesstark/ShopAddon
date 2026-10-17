@@ -44,6 +44,7 @@ public class CreationCheck {
             if (i.hasItemMeta()) {
                 ItemMeta im = i.getItemMeta();
                 if (im.hasDisplayName()) name = ChatColor.stripColor(im.getDisplayName());
+                if (im.hasItemName()) name += "\n" + ChatColor.stripColor(im.getItemName());
                 if (im.hasLore()) lore = ChatColor.stripColor(im.getLore().toString());
             }
 

@@ -21,6 +21,7 @@ import me.tWizT3d_dreaMr.ShopAddon.offlinesales.OfflineSalesCommand;
 import me.tWizT3d_dreaMr.ShopAddon.offlinesales.OfflineSalesListener;
 import me.tWizT3d_dreaMr.ShopAddon.search.CommandSearch;
 import me.tWizT3d_dreaMr.ShopAddon.search.MyShopGUIListener;
+import me.tWizT3d_dreaMr.ShopAddon.util.CapitalizedCommands;
 import me.tWizT3d_dreaMr.ShopAddon.util.Format;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
@@ -52,6 +53,7 @@ public class main extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        CapitalizedCommands.register(this);
 
         Plugin essPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
         if (essPlugin == null || !(essPlugin instanceof IEssentials)) {
