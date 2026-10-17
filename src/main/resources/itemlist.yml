@@ -1,9 +1,24 @@
+# Shop creation limits for BUY, SELL and COMBO shops. Each entry under itemListing is one rule.
+# A shop is refused if its item matches a BlackList rule or breaks the limit of a price rule.
+#
+#   material       Bukkit material name, upper case (TRIAL_KEY). Required.
+#   shoptype       SELL, BUY or ALL. Required.
+#   ListType       BlackList or price.
+#   name-contains  Text the item's name must contain, ignoring case and colours. Optional.
+#   lore-contains  Text the item's lore must contain, ignoring case and colours. Optional.
+#   pricemin       Price rules: "<price> <amount>". The shop's price per item must be at least price/amount.
+#   pricemax       Price rules: "<price> <amount>". The shop's price per item must be at most price/amount.
+#
+# Both limits are inclusive: pricemin: '5 1' allows 5 per item and refuses 4.99. Do not add or subtract 1.
+# A rule may set pricemin or pricemax, not both.
+#
+# An anvil rename replaces a custom name, so a rule that needs name-contains misses a renamed item.
+# For items with distinctive lore, lore-contains on its own is harder to get around.
 itemListing:
   exampleitem:
     ListType: price
-    material: chest
+    shoptype: SELL
+    material: CHEST
     lore-contains: Example lore
     name-contains: Example name
-    pricemin: 1 64
-    pricemax: 2 64
-    ShopType: all
+    pricemin: '1 64'

@@ -2,8 +2,6 @@ package me.tWizT3d_dreaMr.ShopAddon;
 
 import com.snowgears.shop.Shop;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -66,17 +64,8 @@ public class main extends JavaPlugin {
         shop = Shop.getPlugin();
 
         File bwconfigFile = new File(getDataFolder(), "itemlist.yml");
-        if (!bwconfigFile.exists()) {
-            bwconfigFile.getParentFile().mkdirs();
-            InputStreamReader f = new InputStreamReader(getResource("itemlist.yml"));
-            con = YamlConfiguration.loadConfiguration(f);
-            try {
-                con.save(bwconfigFile);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } else con = YamlConfiguration.loadConfiguration(bwconfigFile);
+        if (!bwconfigFile.exists()) saveResource("itemlist.yml", false);
+        con = YamlConfiguration.loadConfiguration(bwconfigFile);
         boolean isWhitelist = false;
 
         config = getConfig();
